@@ -1,71 +1,94 @@
 <script setup>
+import { Link } from '@inertiajs/vue3';
+import { nextTick, ref } from 'vue';
+import PublicationItem from '../components/PublicationItem.vue';
+import TablePager from '../components/TablePager.vue';
+import { useSearch } from '../composables/useSearch';
 import SiteLayout from '../layouts/SiteLayout.vue';
+
+const props = defineProps({
+    publications: { type: Object, required: true },
+    types: { type: Array, required: true },
+    activeType: { type: String, required: true },
+    search: { type: String, default: '' },
+});
+
+const term = useSearch(props.search, '/publications', () => ({ type: props.activeType }));
+
+const modal = ref(null);
+const selected = ref(null);
+
+const openModal = async (publication) => {
+    selected.value = publication;
+    await nextTick();
+    modal.value.showModal();
+};
+
+// A click on the dialog element itself, not its contents, is a click on the backdrop
+const closeOnBackdrop = (event) => {
+    if (event.target === modal.value) {
+        modal.value.close();
+    }
+};
+
+const tabHref = (type) => {
+    const query = new URLSearchParams({ type });
+
+    if (props.search) {
+        query.set('search', props.search);
+    }
+
+    return `/publications?${query}`;
+};
 </script>
 
 <template>
-    <SiteLayout>
-        <template #default>
-<div class="post">
-	<h2 class="title"><a href="#"><b>PUBLICATIONS</b></a></h2>
+    <SiteLayout wide>
+        <div class="post publications">
+            <div class="pub-header">
+                <h2 class="title"><a href="#"><b>Publications</b></a></h2>
+                <input v-model="term" type="search" placeholder="Search publications" aria-label="Search publications" />
+            </div>
 
-	<div class="entry">
-		<h3><br></h3>
-		<h3 class="title"><a href="#">Journal Papers:</a></h3>
+            <nav class="pub-tabs" aria-label="Publication types">
+                <Link
+                    v-for="type in types"
+                    :key="type.key"
+                    :href="$url(tabHref(type.key))"
+                    :class="{ active: type.key === activeType }"
+                    :aria-current="type.key === activeType ? 'page' : undefined"
+                    preserve-scroll
+                >
+                    <span>{{ type.label }}</span>
+                    <span class="pub-count">{{ type.count }}</span>
+                </Link>
+            </nav>
 
-		<p>1. <strong>Nursadul Mamun</strong>, W. A. Jassim, S. A. Zilany. <a href="https://ieeexplore.ieee.org/abstract/document/7035038?casa_token=jVAMcgeihvcAAAAA:po81GqG9J3TocjFUKnDqdWfG8iwciLEbNNjku8X99AdeZH7Gu9CyCn-_EAoDE5AhOX0UmUvB"><u><strong>"Prediction of Speech Intelligibility Using a Neurogram Orthogonal Polynomial Measure (NOPM)".</strong>)</u></a> IEEE Transaction on Audio, Speech, and Language Processing, 2015 (ISI/SCOPUS Cited Publication), vol. 23(4), pp. 760-773. </p>
+            <ol class="pub-list">
+                <PublicationItem
+                    v-for="(publication, index) in publications.data"
+                    :key="publication.id"
+                    :number="publications.from + index"
+                    :publication="publication"
+                    @view-more="openModal"
+                />
+            </ol>
 
-		<p>2. <strong>Nursadul Mamun</strong>, Nahidul Haque Samrat, Choton Kanti Das, Sagor Ghosh. <strong>"Design and Implementation of a Vehicle Monitoring System for Toll Collection".</strong> International Journal of Science &amp; Engineering Research, 2013, V-4, Issue-4. </p>
+            <p v-if="!publications.data.length" class="pub-empty">
+                {{ search ? 'No publications match your search.' : 'No publications yet.' }}
+            </p>
 
+            <TablePager :pagination="publications" />
 
-		<p>3. Afrin Hossain, Tajrin Jahan Rumky, <strong>Nursadul Mamun</strong>. <strong> "Implementation of smart energy meter with two ways communication. International Journal of Science &amp; Engineering Research</strong>, 2013, V-4, Issue-7. </p>
-
-
-		<p>4. <strong>Nursadul Mamun</strong>, S. A. Zilany.  <strong>"A Spectrogram Orthogonal Polynomial Measure (SOPM) for the Prediction of Speech Intelligibility and Quality"  </strong>Submitted to JASA, 2020. </p>
-
-
-
-	</div>
-
-
-
-
-
-	<div class="entry">
-		<h3><br></h3>
-		<h3 class="title"><a href="#">Conference Papers:</a></h3>
-		<br>
-
-		<p>1. <strong>Nursadul Mamun</strong>, Soheil Khorram, John H.L. Hansen  <strong>“Convolutional Neural Network-based Speech Enhancement for Cochlear Implant Recipients </strong>, INTERSPEECH 2019, 15-19 September 2019, Graz, Austria. </p>
-
-		<p>2. <strong>Nursadul Mamun</strong>, Ria Ghosh, John H.L. Hansen . “ <strong>Quantifying Cochlear Implant Users’ Ability for Speaker Identification using CI Auditory Stimuli </strong>, INTERSPEECH 2019, 15-19 September 2019,  Graz, Austria. </p>
-
-
-		<p>3. •	 Khadija Akter, <strong>Nursadul Mamun</strong>. “Predicting Speech Intelligibility with the Regeneration of Envelope from TFS Cues for Hearing Impaired Listeners” EECE, 7-11 February 2019, Bangladesh. </p>
-
-
-		<p>4. •	Md. Ibrahim Khalil, <strong>Nursadul Mamun</strong> , Khadija Akter. <strong>“Robust Text Dependent Speaker Identification Using Neural Responses from the Model of the Auditory System”</strong> EECE, 7-11 February 2019, Bangladesh. </p>
-
-
-
-
-	</div>
-
-
-	<div class="entry">
-		<h3><br></h3>
-		<h3 class="title"><a href="#">Conference Abstracts/Presentations:</a></h3>
-		<br>
-
-
-		<p>1. <strong>Nursadul Mamun</strong>, Soheil Khorram, John H.L. Hansen  <strong>“CCi-MOBILE: Environment-specific speech enhancement with cochlear implant listeners using convolutional neural network" </strong>, 2019 Conference on Implantable Auditory Prostheses (CIAP), Lake Tahoe, California, USA.  </p>
-
-		<p>2. •	Ria Ghosh, Juliana N. Saba, <strong>Nursadul Mamun</strong>, Hussnain Ali, John H.L. Hansen . “ <strong>“CCi-Mobile: moving towards exploring advanced research paradigms for cochlear implant and hearing aid users" </strong>,  2019 Conference on Implantable Auditory Prostheses (CIAP), Lake Tahoe, California, USA.  </p>
-
-
-
-
-	</div>
-</div>
-        </template>
+            <dialog ref="modal" class="pub-modal" aria-labelledby="pub-modal-title" @click="closeOnBackdrop" @close="selected = null">
+                <template v-if="selected">
+                    <div class="pub-modal-header">
+                        <h3 id="pub-modal-title">{{ selected.title }}</h3>
+                        <button type="button" class="pub-modal-close" aria-label="Close" @click="modal.close()">&times;</button>
+                    </div>
+                    <div class="pub-modal-body rich-text" tabindex="0" v-html="selected.description"></div>
+                </template>
+            </dialog>
+        </div>
     </SiteLayout>
 </template>

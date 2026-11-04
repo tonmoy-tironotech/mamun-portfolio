@@ -2,7 +2,9 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+    // Relative paths let lazy-loaded chunks work when the site runs in a subfolder
+    base: command === 'build' ? './' : undefined,
     plugins: [
         laravel({
             input: ['resources/css/admin.css', 'resources/js/app.js'],
@@ -39,4 +41,4 @@ export default defineConfig({
             ignored: (path) => /\/(vendor|storage|public|bootstrap|node_modules|_original-site|\.shots|tests|database|config|app|docker)(\/|$)/.test(path),
         },
     },
-});
+}));

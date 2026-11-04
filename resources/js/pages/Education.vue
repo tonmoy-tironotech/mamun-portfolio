@@ -3,11 +3,13 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 </script>
 
 <template>
-    <SiteLayout>
+    <SiteLayout wide>
         <template #default>
 <div class="post">
-
-	<h2 class="title"><a href="#"><b>EDUCATION</b></a></h2>
+<h2 class="title"><a href="#"><b>EDUCATION</b></a></h2>
+</div>
+<div class="side-row">
+<div class="post">
 
 	<div class="entry">
 		<img :src="$url('/images/UTD_logo.png')" width="160" vspace="9" align="right">
@@ -20,6 +22,9 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 
 	</div>
 </div>
+<img class="side-image" :src="$url('/images/UTD_pic.jpg')" alt="">
+</div>
+<div class="side-row">
 <div class="post post-alt">
 	<img :src="$url('/images/UM_logo.png')" width="160" vspace="9" align="right">
 	<h3 class="title"><a href="#">Master of Science in Biomedical Eng.</a></h3>
@@ -32,6 +37,9 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 
 	</div>
 </div>
+<img class="side-image" :src="$url('/images/MS_conv.jpg')" alt="">
+</div>
+<div class="side-row">
 <div class="post">
 	<img :src="$url('/images/CUET_logo.jpg')" width="100" height="100" vspace="9" align="right">
 	<h3 class="title"><a href="#">Bachelor in Electrical and Electronic Eng.</a></h3>
@@ -42,25 +50,8 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 		</p><p class="links"><a href="#"></a></p>
 	</div>
 </div>
-<div style="clear: both;"> </div>
-        </template>
-        <template #sidebar>
-<ul>
-	<li>
-		<br><br><br><br>
-		<img class="left" :src="$url('/images/UTD_pic.jpg')" width="300" height="250" alt="">
-		<br><br><br><br><br><br><br><br><br><br>
-
-		<div id="search">
-			<img class="left" :src="$url('/images/MS_conv.jpg')" width="300" height="250" alt="">
-			<br><br><br><br><br><br><br><br><br><br>
-
-			<img class="left" :src="$url('/images/BS_conv1.jpg')" width="300" height="250" alt="">
-		</div>
-		<div style="clear: both;"> </div>
-
-
-</li></ul>
+<img class="side-image" :src="$url('/images/BS_conv1.jpg')" alt="">
+</div>
         </template>
     </SiteLayout>
 </template>

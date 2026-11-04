@@ -3,19 +3,24 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 </script>
 
 <template>
-    <SiteLayout>
+    <SiteLayout wide>
         <template #default>
 <div class="post">
-	<h2 class="title"><a href="#"><b>EXPERIENCE</b></a></h2>
+<h2 class="title"><a href="#"><b>EXPERIENCE</b></a></h2>
+</div>
+<div class="side-row">
+<div class="post">
 
 	<div class="entry">
-		<h3><br></h3>
 		<h3 class="title"><a href="#">Research Assistant </a></h3>
 		<p><strong><a href="https://crss.utdallas.edu/"><u>CENTER FOR ROBUST SPEECH SYSTEMS</u></a></strong> (August 2018-Present)</p>
 		<p>- Supervise production of 30 CCi-Mobile research platforms, to be shipped to other research labs.<br>- Make advancements to the existing Verilog code on the <a href="https://www.utdallas.edu/~hussnain.ali/CCIMobile.html"><u>CCi-Mobile Platform</u></a> for testing cochlear<br>    implants.<br> - Work towards a better and compact revision of the CCi-Mobile platform allowing more than one    algorithms existing on the FPGA, with capabilities to switch between the strategies.<br>- Incorporate latest robust technology along with wireless networking strategies for non-clinical trials</p>
 		<p><strong>Skills acquired: </strong> VHDL, Verilog,C, MATLAB,EAGLE,Testing and Documentation,Product Management</p>
 	</div>
 </div>
+<img class="side-image" :src="$url('/images/CRSS-UTD.jpg')" alt="">
+</div>
+<div class="side-row">
 <div class="post post-alt">
 
 	<h3 class="title"><a href="#">Embedded System Control Engineer (Intern)</a></h3>
@@ -26,6 +31,9 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 
 	</div>
 </div>
+<img class="side-image" :src="$url('/images/UTDleg_full.jpg')" alt="">
+</div>
+<div class="side-row">
 <div class="post">
 
 	<h3 class="title"><a href="#">Intern-Engineering Design &amp; Implementation</a></h3>
@@ -36,6 +44,9 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 
 	</div>
 </div>
+<img class="side-image" :src="$url('/images/teched.jpg')" alt="">
+</div>
+<div class="side-row">
 <div class="post">
 
 	<h3 class="title"><a href="#">Hardware Design Intern</a></h3>
@@ -47,23 +58,8 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 		<p class="links"><a href="#"></a></p>
 	</div>
 </div>
-        </template>
-        <template #sidebar>
-<ul>
-	<li>
-		
-		<br><br>
-		<img class="left" :src="$url('/images/CRSS-UTD.jpg')" width="300" height="310" alt="">
-		<img class="center" :src="$url('/images/UTDleg_full.jpg')" width="300" height="300" alt="">
-		<div id="search">
-
-			<img class="center" :src="$url('/images/teched.jpg')" width="250" height="230" alt="">
-			<img class="center" :src="$url('/images/vardhman.jpg')" width="300" height="300" alt="">
-		</div>
-		<div style="clear: both;"> </div>
-
-
-</li></ul>
+<img class="side-image" :src="$url('/images/vardhman.jpg')" alt="">
+</div>
         </template>
     </SiteLayout>
 </template>

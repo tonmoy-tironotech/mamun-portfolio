@@ -1,0 +1,54 @@
+<?php
+
+// Initial projects, loaded by ProjectSeeder. `body` may use the tags allowed in Project::safeBody().
+return [
+    [
+        'slug' => 'cci-mobile-research-platform',
+        'title' => 'Upgrade Research platform for assistive Hearing devices and Cochlear Implants',
+        'image' => '/images/CCiMOBILE.jpg',
+        'url' => 'https://crss.utdallas.edu/',
+        'body' => 'This multi-year project, funded by National Institute of Health (NIH), USA, aims to design more advanced revisions of the <a href="https://www.utdallas.edu/~hussnain.ali/CCIMobile.html"><u>CCi-MOBILE </u></a>platform with advanced features such as multiple implant strategies being able to be accessed from the same platform and making the architecture of the board even more compact, which currently matches the size of a credit card. This would then lead to the integration of commercially available smartphones with clinical assistive hearing devices as a mechanism to leverage the computing powers and programming flexibility of modern smartphones to implement and test new sound processing strategies with hearing impaired population. Such a setup is capable of streaming custom stimuli to hearing devices, and has opened-up a number of possibilities to conduct diverse range of experiments, including evaluation of novel speech processing algorithms, noise-reduction strategies, and user-specified on-the-go customization etc. This one-of-a-kind system is currently under investigational use at several laboratories and research centers across the world, including USA, Canada, Brazil, Belgium, Australia, and China. The innovations brought-forth by this project have created a paradigm shift in the hearing research in bridging basic scientific research with commercial applications and could potentially beneï¬t hundreds of thousands of hearing-impaired people worldwide. <strong> Tools used: Verilog, Xilinx ISE, Modelsim</strong>',
+    ],
+    [
+        'slug' => 'exoskeleton-control-gui',
+        'title' => 'Java based Control GUI for Wireless Robotic Exo-skeletons',
+        'image' => '/images/Leg.jpg',
+        'url' => 'http://www.utdallas.edu/~rdg130030/locolab/index.html',
+        'body' => 'This project was a part of another NIH funded project for the Locomotor System Control Laboratory which aimed to control the various modes of ambulation assisting the subject to change to the following modes - passive, quasi-stiffness,manual and body-weight support, according to their need and comfort level. The GUI sends and receives acknowledgment from the TI C2000 micro-controller over the bluetooth, which in turn has all the motor control and torque requirements programmed on it in C. The scope of this project includes developing effective serial communication strategies and making the Bluetooth-interfaced control module robust enough to send command and receive acknowledgments from the exo-skeleton.<strong> Tools used:C, Java, Code Composure Studio, Elmo StudioII, KiCAD</strong>',
+    ],
+    [
+        'slug' => 'fpga-heartbeat-detector',
+        'title' => 'FPGA based wearable Heart-beat detector and Arrhythmia classifier',
+        'image' => '/images/spartan.jpg',
+        'url' => 'http://ecs.utdallas.edu/research/researchlabs/QoLT/index.html',
+        'body' => 'Fitness trackers use photoplethysmography (PPG) to measure heart rates, but to be highly accurate, ECG heart monitoring is highly recommended which which not only help to monitor the proper functioning of the heart but also prevent arrhythmia conditions like Pre-ventricular or Articular Contractions from causing severe damage to the heart. The MATLAB based-modification of the Pan-Tompkins algorithm is converted to VHDL to be implemented on the SPARTAN-6 to analyze hardware utilization and efficiency in real-world noisy environments which gave an accuracy of 99.69%.Then using real-time input data from patients using ECG sensors and streaming it wirelessly into an watch or wearable device having a ASIC chip where the beat-classifier algorithm is loaded, to give the subject instantaneous reading of the subject\'s heart rate along with any abnormal behavior of the heart.<strong> Tools used:MATLAB, VHDL, HDL Coder, System Generator, Xilinx ISE, Cadence</strong>',
+    ],
+    [
+        'slug' => 'serial-communication-strategies',
+        'title' => 'Testing various Serial Communication strategies for efficient transfer of data on the MSP432 and ST-F303K8 ARM Cortex',
+        'image' => '/images/connect.jpg',
+        'url' => null,
+        'body' => 'This is a general theme of several of my projects that I prepared as a Teaching assistant for the undergraduate students in the course- Introduction to Electrical Engineering II. The spectrum of the projects revolved around analyzing the efficiency rates of UART, SPI and I2C strategies of serial communication and implement each in the best possible way according to requirements and capabilities on the system needing them.<strong> Tools used:C++, Energia, Code Composure Studio, Keil </strong>',
+    ],
+    [
+        'slug' => 'hearing-aid-asic',
+        'title' => 'Design and Implementation of Application Specific Integrated Circuit for Hearing Aids',
+        'image' => '/images/new_circuit.jpg',
+        'url' => null,
+        'body' => 'This project involved programming for a design and application specific Mini Stereo Digital Audio Processor in C as well as in Verilog, by converting the given algorithm into code language, creating finite state machines for step wise execution of the algorithm and finally comparing the output with desired results, to get accurate deliverables else debugging by root-cause analysis.<strong> Tools used:C, Verilog, ModelSIM, Testing and Verification,Low-level Circuit Design </strong>',
+    ],
+    [
+        'slug' => 'distributed-mutual-exclusion',
+        'title' => 'Building a mutually exclusive distributed system over a socket cluster network',
+        'image' => '/images/struc.jpg',
+        'url' => null,
+        'body' => 'The project scope comprised of development and implementation of the Raymond\'s mutually exclusive algorithm, imposing a logical structure (a K-ary tee) on the distributed resources using SCTP sockets over the UTD network cluster, consisting of 45 machines. The distributed system was modeled using greedy and non-greedy variants of the algorithm with respect to message complexity, response time and system throughput followed by a mechanism to test the correctness of our implementation, ascertaining that at most one process is in critical section at any given point of time.<strong> Tools used:Eclipse, Java, Linux, Socket programming, TCP-IP/SCTP networks</strong>',
+    ],
+    [
+        'slug' => 'cpu-cache-optimization',
+        'title' => 'Optimizing cache design choices of the CPU',
+        'image' => '/images/cache.jpg',
+        'url' => null,
+        'body' => 'This project is aimed at generating an optimal cache design by making sensible trade-offs between cost and performance of the CPU, by comparing the L1 and L2 cache through a data of 5 SPEC CPU benchmarks.<strong> Tools used:Perl scripting, Linux, data-logging, Excel</strong>',
+    ],
+];

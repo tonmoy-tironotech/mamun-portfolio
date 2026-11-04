@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -13,7 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->redirectTo(guests: '/admin/login', users: '/admin');
+        $middleware->redirectTo(
+            guests: '/login',
+            users: fn (Request $request) => $request->user()->is_admin ? '/admin' : '/student-corner',
+        );
+
+        $middleware->alias(['admin' => EnsureUserIsAdmin::class]);
 
         $middleware->web(append: [
             HandleInertiaRequests::class,

@@ -31,7 +31,9 @@ class HandleInertiaRequests extends Middleware
      */
     public function version(Request $request): ?string
     {
-        return parent::version($request);
+        // A different version forces a full reload, so moving between the
+        // public site and the admin panel swaps their stylesheets too
+        return parent::version($request).'-'.$this->rootView($request);
     }
 
     /**
@@ -45,7 +47,7 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            'auth' => fn () => ['user' => $request->user()?->only('id', 'name', 'email')],
+            'auth' => fn () => ['user' => $request->user()?->only('id', 'name', 'email', 'is_admin')],
             'flash' => fn () => ['status' => $request->session()->get('status')],
         ];
     }

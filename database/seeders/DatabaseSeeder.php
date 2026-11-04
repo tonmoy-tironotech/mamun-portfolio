@@ -16,19 +16,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        if (User::exists()) {
-            return;
+        if (! User::exists()) {
+            // The password is generated here and only ever shown in this output
+            $password = Str::password(16, symbols: false);
+
+            $user = User::create([
+                'name' => 'Super Admin',
+                'email' => 'admin@example.com',
+                'password' => $password,
+            ]);
+
+            $user->forceFill(['is_admin' => true])->save();
+
+            $this->command->warn("Admin created: {$user->email} / {$password}");
         }
 
-        // The password is generated here and only ever shown in this output
-        $password = Str::password(16, symbols: false);
-
-        $user = User::create([
-            'name' => 'Super Admin',
-            'email' => 'admin@example.com',
-            'password' => $password,
-        ]);
-
-        $this->command->warn("Superadmin created: {$user->email} / {$password}");
+        $this->call([ProjectSeeder::class, DocumentSeeder::class, PublicationSeeder::class]);
     }
 }

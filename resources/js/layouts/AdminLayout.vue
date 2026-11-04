@@ -12,6 +12,10 @@ const page = usePage();
             <div class="admin-brand">Admin Panel</div>
             <nav class="admin-nav">
                 <Link :href="$url('/admin')" :class="{ active: page.component === 'admin/Dashboard' }">Dashboard</Link>
+                <Link :href="$url('/admin/projects')" :class="{ active: page.component.startsWith('admin/projects') }">Projects</Link>
+                <Link :href="$url('/admin/documents')" :class="{ active: page.component.startsWith('admin/documents') }">Documents</Link>
+                <Link :href="$url('/admin/publications')" :class="{ active: page.component.startsWith('admin/publications') }">Publications</Link>
+                <Link :href="$url('/admin/users')" :class="{ active: page.component.startsWith('admin/users') }">Users</Link>
                 <Link :href="$url('/admin/profile')" :class="{ active: page.component === 'admin/Profile' }">Profile</Link>
                 <a :href="$url('/')" target="_blank" rel="noopener">View site</a>
             </nav>
@@ -21,7 +25,7 @@ const page = usePage();
                 <h1>{{ title }}</h1>
                 <div class="admin-user">
                     <span>{{ page.props.auth.user.name }}</span>
-                    <Link :href="$url('/admin/logout')" method="post" as="button" class="btn btn-secondary">Log out</Link>
+                    <Link :href="$url('/logout')" method="post" as="button" class="btn btn-secondary">Log out</Link>
                 </div>
             </header>
             <main class="admin-content">

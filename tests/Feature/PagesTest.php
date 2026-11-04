@@ -2,18 +2,20 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\TestCase;
 
 class PagesTest extends TestCase
 {
+    use RefreshDatabase;
+
     #[TestWith(['/', 'Home'])]
     #[TestWith(['/education', 'Education'])]
     #[TestWith(['/experience', 'Experience'])]
     #[TestWith(['/projects', 'Projects'])]
     #[TestWith(['/publications', 'Publications'])]
-    #[TestWith(['/student-corner', 'StudentCorner'])]
     #[TestWith(['/hobbies', 'Hobbies'])]
     #[TestWith(['/contact', 'Contact'])]
     public function test_page_renders_its_inertia_component(string $uri, string $component): void

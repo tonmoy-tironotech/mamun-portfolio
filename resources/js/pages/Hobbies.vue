@@ -3,18 +3,23 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 </script>
 
 <template>
-    <SiteLayout>
+    <SiteLayout wide>
         <template #default>
 <div class="post">
-	<h2 class="title"><a href="#"><b>Hobbies</b></a></h2>
+<h2 class="title"><a href="#"><b>Hobbies</b></a></h2>
+</div>
+<div class="side-row">
+<div class="post">
 
 	<div class="entry">
-		<h3><br></h3>
 		<p><strong><a href=""><u>Volunteering</u></a></strong> </p>
 		<p> When 'not breaking parts down' I like fund-raising and helping out for a cause, which not only makes me feel proud of myself but also gives me a peace of mind as I get charged up with positive energy in doing so. I have been volunteering for Leukemia and Lymphoma Society in fund-raisers, yearly events and being a support for the Cancer survivors. I also volunteer for Society of Women Engineers promoting K-12 girls to take up STEM after High-School. By doing so I feel, educating the young generation with the right insights, might help them to move forward on a smoother path than what I faced while growing up.  </p>
 
 	</div>
 </div>
+<img class="side-image" :src="$url('/images/volunteer.jpg')" alt="">
+</div>
+<div class="side-row">
 <div class="post post-alt">
 
 
@@ -25,6 +30,9 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 
 	</div>
 </div>
+<img class="side-image" :src="$url('/images/walk.jpg')" alt="">
+</div>
+<div class="side-row">
 <div class="post">
 
 	<p><strong><a href="#"><u>Being a Jack of All Trades</u></a></strong> </p>
@@ -34,6 +42,9 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 
 	</div>
 </div>
+<img class="side-image" :src="$url('/images/together.jpg')" alt="">
+</div>
+<div class="side-row">
 <div class="post">
 
 	<p><strong><a href="#"><u>Writing Poetry and Reading Mystery Novels</u></a></strong> </p>
@@ -43,23 +54,8 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 
 	</div>
 </div>
-        </template>
-        <template #sidebar>
-<ul>
-	<li>
-		
-		<br><br>
-		<img class="left" :src="$url('/images/volunteer.jpg')" width="250" height="250" alt=""><br>
-		<img class="left" :src="$url('/images/walk.jpg')" width="270" height="260" alt="">
-		<div id="search">
-
-			<img class="center" :src="$url('/images/together.jpg')" width="300" height="240" alt="">
-			<img class="center" :src="$url('/images/certi.jpg')" width="300" height="240" alt="">
-		</div>
-		<div style="clear: both;"> </div>
-
-
-</li></ul>
+<img class="side-image" :src="$url('/images/certi.jpg')" alt="">
+</div>
         </template>
     </SiteLayout>
 </template>
