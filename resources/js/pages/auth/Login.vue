@@ -19,6 +19,8 @@ const submit = () => form.post(url('/login'), { onFinish: () => form.reset('pass
             <input id="password" v-model="form.password" type="password" autocomplete="current-password" required />
             <p v-if="form.errors.password" class="field-error">{{ form.errors.password }}</p>
 
+            <p class="auth-forgot"><Link :href="$url('/forgot-password')">Forgot password?</Link></p>
+
             <button type="submit" class="auth-submit" :disabled="form.processing">Log in</button>
         </form>
         <p class="auth-switch">Don't have an account? <Link :href="$url('/register')">Sign up</Link></p>

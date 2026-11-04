@@ -15,6 +15,7 @@ const page = usePage();
                 <Link :href="$url('/admin/projects')" class="btn">Manage projects</Link>
                 <Link :href="$url('/admin/documents')" class="btn">Manage documents</Link>
                 <Link :href="$url('/admin/publications')" class="btn">Manage publications</Link>
+                <Link :href="$url('/admin/messages')" class="btn">Messages</Link>
                 <Link :href="$url('/admin/users')" class="btn">Manage users</Link>
                 <Link :href="$url('/admin/profile')" class="btn btn-secondary">Edit profile</Link>
                 <a :href="$url('/')" target="_blank" rel="noopener" class="btn btn-secondary">View site</a>

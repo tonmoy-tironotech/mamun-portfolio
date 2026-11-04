@@ -34,6 +34,28 @@ services:
       # Linux-only native binaries; also much faster than the Windows bind mount
       - node-modules:/var/www/html/node_modules
 
+  # Sends queued mail. Restart it after code changes: docker compose restart queue
+  queue:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    command: php artisan queue:work --tries=3 --backoff=60 --max-time=3600
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/app.ini:ro
+    depends_on:
+      - mysql
+
+  # Catches outgoing mail locally, nothing reaches real inboxes. Inbox: http://localhost:8202
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8202:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
   mysql:
     image: mysql:8.0
     ports:

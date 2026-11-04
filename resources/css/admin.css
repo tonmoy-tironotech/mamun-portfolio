@@ -320,6 +320,54 @@ td a {
     color: var(--accent-dark);
 }
 
+.col-subject {
+    color: var(--text);
+    font-weight: 600;
+}
+
+tr.unread {
+    background: #f5f9fd;
+}
+
+.message-body {
+    margin-top: 16px !important;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+}
+
+.badge-replied {
+    background: #e7f6ec;
+    color: #14632f;
+}
+
+.reply-item {
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+}
+
+.reply-item:first-of-type {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.reply-item .message-body {
+    margin-top: 6px !important;
+}
+
+.nav-count {
+    display: inline-block;
+    min-width: 20px;
+    margin-left: 6px;
+    padding: 0 6px;
+    background: #7fd4ff;
+    border-radius: 999px;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+}
+
 .col-date {
     color: var(--muted);
     white-space: nowrap;

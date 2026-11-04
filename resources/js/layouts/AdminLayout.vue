@@ -15,6 +15,10 @@ const page = usePage();
                 <Link :href="$url('/admin/projects')" :class="{ active: page.component.startsWith('admin/projects') }">Projects</Link>
                 <Link :href="$url('/admin/documents')" :class="{ active: page.component.startsWith('admin/documents') }">Documents</Link>
                 <Link :href="$url('/admin/publications')" :class="{ active: page.component.startsWith('admin/publications') }">Publications</Link>
+                <Link :href="$url('/admin/messages')" :class="{ active: page.component.startsWith('admin/messages') }">
+                    Messages
+                    <span v-if="page.props.unreadMessages" class="nav-count">{{ page.props.unreadMessages }}</span>
+                </Link>
                 <Link :href="$url('/admin/users')" :class="{ active: page.component.startsWith('admin/users') }">Users</Link>
                 <Link :href="$url('/admin/profile')" :class="{ active: page.component === 'admin/Profile' }">Profile</Link>
                 <a :href="$url('/')" target="_blank" rel="noopener">View site</a>

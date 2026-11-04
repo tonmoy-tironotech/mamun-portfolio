@@ -1,4 +1,5 @@
 <script setup>
+import ContactForm from '../components/ContactForm.vue';
 import SiteLayout from '../layouts/SiteLayout.vue';
 </script>
 
@@ -39,6 +40,7 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 
 
 <div style="clear: both;"> </div>
+<ContactForm />
         </template>
         <template #sidebar>
 <ul>

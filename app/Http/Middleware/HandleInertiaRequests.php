@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\ContactMessage;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -49,6 +50,9 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => fn () => ['user' => $request->user()?->only('id', 'name', 'email', 'is_admin')],
             'flash' => fn () => ['status' => $request->session()->get('status')],
+            'unreadMessages' => fn () => $request->is('admin', 'admin/*') && $request->user()?->is_admin
+                ? ContactMessage::whereNull('read_at')->count()
+                : null,
         ];
     }
 }

@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\PublicationController as AdminPublicationController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PublicationController;
@@ -19,12 +22,17 @@ Route::get('/projects/{project:slug}', [ProjectController::class, 'show'])->name
 Route::get('/publications', [PublicationController::class, 'index'])->name('publications');
 Route::inertia('/hobbies', 'Hobbies')->name('hobbies');
 Route::inertia('/contact', 'Contact')->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
+    Route::get('/forgot-password', [PasswordResetController::class, 'create'])->name('password.request');
+    Route::post('/forgot-password', [PasswordResetController::class, 'store'])->middleware('throttle:5,1')->name('password.email');
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'edit'])->name('password.reset');
+    Route::post('/reset-password', [PasswordResetController::class, 'update'])->middleware('throttle:10,1')->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {
@@ -46,6 +54,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('documents', AdminDocumentController::class)->except('show');
     Route::resource('publications', AdminPublicationController::class)->except('show');
     Route::resource('users', AdminUserController::class)->only(['index', 'edit', 'update']);
+    Route::resource('messages', ContactMessageController::class)->only(['index', 'show', 'destroy']);
+    Route::post('/messages/{message}/reply', [ContactMessageController::class, 'reply'])->name('messages.reply');
 });
 
 // Keep links to the old static .html pages working

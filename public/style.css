@@ -1230,6 +1230,76 @@ html:has(.pub-modal[open]) {
 }
 
 
+/* Forms: messages, password reset and contact */
+
+.form-success {
+	margin: 0 0 14px;
+	padding: 11px 14px;
+	background: #E7F6EC;
+	border-radius: 8px;
+	line-height: 1.5;
+	color: #14632F;
+}
+
+.auth-hint {
+	margin: 0 0 6px;
+	line-height: 1.5;
+}
+
+.auth-forgot {
+	margin: 10px 0 0;
+	line-height: 1.5;
+	text-align: right;
+}
+
+.auth-forgot a {
+	font-weight: 600;
+}
+
+.contact-form {
+	clear: both;
+	margin-top: 32px;
+	padding-top: 24px;
+	border-top: 1px solid #E2E8F0;
+}
+
+.contact-form h3 {
+	margin-bottom: 12px;
+	font-size: 24px;
+}
+
+.contact-fields {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0 16px;
+}
+
+.auth-form textarea {
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid #C8D0DC;
+	border-radius: 8px;
+	resize: vertical;
+	font: inherit;
+}
+
+.auth-form textarea:focus {
+	border-color: #0B5394;
+	outline: 2px solid rgba(11, 83, 148, 0.2);
+}
+
+/* Off screen rather than display:none, which many bots skip */
+.contact-trap {
+	position: absolute;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+
 /* Responsive */
 
 @media (max-width: 1300px) {
@@ -1372,6 +1442,10 @@ html:has(.pub-modal[open]) {
 }
 
 @media (max-width: 600px) {
+	.contact-fields {
+		grid-template-columns: 1fr;
+	}
+
 	.doc-detail > h2 {
 		font-size: 26px;
 	}
