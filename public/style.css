@@ -1,0 +1,631 @@
+
+/*
+Design by TEMPLATED
+http://templated.co
+Released for free under the Creative Commons Attribution License
+*/
+
+body {
+	margin: 0;
+	padding: 0;
+	background: #02021A url(images/background.jpg) repeat-x left top;
+	font-family: 'Open Sans', Arial, sans-serif;
+	font-size: 15px;
+	color: #222222;
+}
+
+h1, h2, h3, h4 {
+	margin: 0px;
+	padding: 0px;
+	letter-spacing: 0;
+	/*text-transform: uppercase;*/
+	font-family: 'Bree Serif', Georgia, serif;
+	font-weight: normal;
+	
+	color: #000045;
+}
+
+h1 {
+	font-size: 2em;
+}
+
+h2 {
+	letter-spacing: 1px;
+	font-size: 1.6em;
+	text-transform: uppercase;
+}
+
+h3 {
+	font-size: 1.6em;
+	
+}
+
+p, ul, ol {
+	margin-top: 0;
+	line-height: 170%;
+}
+
+ul, ol {
+}
+
+a {
+	text-decoration: none;
+	color: #0B5394;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+/* Header */
+
+#app {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+#header-wrapper {
+	background: rgba(0, 0, 0, 0.55);
+}
+
+#header {
+	clear: both;
+	width: 1000px;
+	margin: 0px auto;
+}
+
+/* Logo */
+
+#logo {
+	margin: 0px;
+	padding: 30px 0px;
+	font-size: 16px;
+	color: #FFFFFF;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+#logo h1, #logo p {
+	margin: 0;
+	padding: 0;
+}
+
+#logo h1 {
+	margin: 0px;
+	padding: 30px 0px;
+	text-align: center;
+	font-size: 56px;
+	font-weight: 400;
+	color: #FFF;
+}
+
+#logo h1 span {
+}
+
+#logo a {
+	border: none;
+	background: none;
+	text-decoration: none;
+	color: #FFF;
+}
+
+/* Search */
+
+#search {
+	width: 320px;
+	height: 60px;
+	padding: 0px;
+}
+
+#search form {
+	margin: 0px;
+	padding: 0px;
+}
+
+#search fieldset {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+#search-text {
+	width: 250px;
+	outline: none;
+	background: #F5F0E7;
+	border: 1px solid #D7D0C0;
+	padding: 10px;
+	border-radius: 8px;
+	text-transform: lowercase;
+	font-family: 'Open Sans', sans-serif;
+	color: #454545;
+}
+
+#search-submit {
+	width: 62px;
+	height: 22px;
+	display: none;
+	border: none;
+	color: #FFFFFF;
+}
+
+/* Menu */
+
+#menu-wrapper {
+	background: #000000;
+}
+
+#menu {
+	margin: 0px auto;
+	padding: 0px;
+}
+
+#menu ul {
+	margin: 0;
+	padding: 0px 0px 0px 0px;
+	list-style: none;
+	line-height: normal;
+	text-align: center;
+}
+
+#menu li {
+	display: inline-block;
+	border-right: 1px solid #FFFFFF;
+	border-left: 1px solid #FFFFFF;
+}
+
+#menu a {
+	display: block;
+	letter-spacing: 1px;
+	margin: 0px 10px;
+	line-height: 55px;
+	padding: 0 20px;
+	text-decoration: none;
+	text-align: center;
+	text-transform: uppercase;
+	font-family: 'Bree Serif', Georgia, serif;
+/*	font-family: 'Roboto Condensed', sans-serif;*/
+	font-size: 14px;
+	font-weight: normal;
+	color: #FFFFFF;
+	border: none;
+}
+
+#menu a:hover, #menu .current_page_item a {
+	text-decoration: none;
+}
+
+#menu a:hover, #menu .current_page_item a {
+	color: #7FD4FF;
+}
+
+/* Hamburger button, only shown on phones */
+
+.menu-toggle {
+	display: none;
+}
+
+/* Page */
+
+#wrapper
+{
+	flex: 1;
+	overflow: hidden;
+	padding-bottom: 40px;
+}
+
+#page {
+	overflow: hidden;
+	width: 1000px;
+	margin: 0px auto;
+	padding: 70px 50px 30px 50px;
+	background: #FFFFFF;
+}
+
+/* Content */
+
+#content {
+	float: left;
+	width: 620px;
+}
+
+.post {
+	margin-bottom: 15px;
+}
+
+.post-alt
+{
+}
+
+.post .title {
+	padding: 12px 0 8px 0;
+	line-height: 1.25;
+	font-size: 28px;
+}
+
+.post .title a {
+	border: none;
+	color: #000000;
+}
+
+.post .meta {
+	margin-bottom: 30px;
+	padding: 5px 0px 15px 0px;
+	text-align: left;
+	font-weight: normal;
+}
+
+.post .meta .date {
+	float: left;
+}
+
+.post .meta .posted {
+	float: right;
+}
+
+.post .meta a {
+}
+
+.post .entry {
+	padding: 0px 0px 20px 0px;
+	padding-bottom: 20px;
+	text-align: left;
+}
+
+.links {
+	display: inline-block;
+	height: 30px;
+	padding: 30px 0px 0px 0px;
+	font-size: 14px;
+	font-weight: normal;
+	color: #000080;
+}
+
+.button
+{
+	padding: 10px 25px;
+	background: #000033;
+	border-radius: 5px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	font-size: 14px;
+	color: #FFFFFF;
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: right;
+	width:300px;
+	margin: 0px;
+	color: #000000;
+}
+
+#sidebar p
+{
+	color: #000000;
+}
+
+
+#sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#sidebar li {
+	margin: 0;
+	padding: 0;
+}
+
+#sidebar li ul {
+	margin: 0px 0px;
+	padding-bottom: 50px;
+}
+
+#sidebar li li {
+	border-bottom: 1px solid #000000;
+	margin: 0px 0px;
+	padding: 10px 0px;
+	border-left: none;
+	list-style: inside circle;
+}
+
+#sidebar li li a {
+	color: #000000;
+}
+
+#sidebar li li span {
+	display: block;
+	padding: 0;
+	font-size: 11px;
+	font-style: italic;
+}
+
+#sidebar h2 {
+	padding-bottom: 20px;
+	font-size: 1.4em;
+	color: #000000;
+}
+
+#sidebar p {
+	margin: 0px 0px 40px 0px;
+	padding: 0px;
+	text-align: left;
+}
+
+#sidebar a {
+	border: none;
+}
+
+#sidebar a:hover {
+	text-decoration: underline;
+}
+
+/* Calendar *
+
+#calendar {
+}
+
+#calendar_wrap {
+	padding: 20px;
+}
+
+#calendar table {
+	width: 100%;
+}
+
+#calendar tbody td {
+	text-align: center;
+}
+
+#calendar #next {
+	text-align: right;
+}
+
+/* Footer */
+
+#footer {
+	margin: 0 auto;
+	padding: 18px 0;
+	width: 100%;
+	background: #000000;
+}
+
+#footer p {
+	margin: 0;
+	line-height: normal;
+	font-size: 12px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: center;
+	color: #FFFFFF;
+}
+
+#footer a {
+	color: #FFFFFF;
+}
+
+#banner {
+	width: 1000px;
+	margin: 0px auto;
+}
+
+#banner img
+{
+	border-radius: 8px;
+}
+
+/* Contact icons */
+
+.contact-icons {
+	display: flex;
+	gap: 16px;
+	margin-top: 10px;
+}
+
+.contact-icons a {
+	flex: 0 1 170px;
+	min-width: 0;
+}
+
+#content .contact-icons img {
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	max-width: none;
+	height: auto;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	border-radius: 10px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 1140px) {
+	#header {
+		width: auto;
+	}
+
+	#page {
+		width: auto;
+		margin: 0 16px;
+		padding: 40px 32px 30px;
+	}
+
+	#content {
+		width: 62%;
+	}
+
+	#sidebar {
+		width: 32%;
+	}
+
+	#search {
+		width: auto;
+		height: auto;
+	}
+
+	#sidebar img {
+		max-width: 100%;
+		height: auto;
+	}
+
+	#menu a {
+		margin: 0;
+		padding: 0 12px;
+		font-size: 13px;
+	}
+}
+
+@media (max-width: 860px) {
+	#menu ul {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+	}
+
+	#menu li {
+		border: 0;
+		border-bottom: 1px solid #333333;
+	}
+
+	#menu a {
+		padding: 0 6px;
+		line-height: 44px;
+	}
+
+	/* Spacer line breaks and empty link rows only make sense beside the sidebar */
+	#search br, #sidebar li > br:nth-child(-n+5) {
+		display: none;
+	}
+
+	#content .links:has(> a:empty) {
+		display: none;
+	}
+
+	#content, #sidebar {
+		float: none;
+		width: auto;
+		overflow-wrap: anywhere;
+	}
+
+	#sidebar {
+		margin-top: 24px;
+	}
+
+	#content img {
+		max-width: 100%;
+		height: auto;
+	}
+
+	#page {
+		padding: 24px 20px;
+	}
+
+	#logo {
+		padding: 16px;
+	}
+
+	#logo h1 {
+		padding: 12px 0;
+		font-size: 40px;
+	}
+}
+
+@media (max-width: 600px) {
+	#menu-wrapper {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+	}
+
+	.menu-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		height: 56px;
+		padding: 0 16px;
+		background: none;
+		border: 0;
+		cursor: pointer;
+	}
+
+	.menu-toggle-label {
+		letter-spacing: 1px;
+		text-transform: uppercase;
+		font-family: 'Bree Serif', Georgia, serif;
+		font-size: 15px;
+		color: #7FD4FF;
+	}
+
+	.menu-toggle-icon span {
+		display: block;
+		width: 24px;
+		height: 2px;
+		margin: 5px 0;
+		background: #FFFFFF;
+		transition: transform 0.2s, opacity 0.2s;
+	}
+
+	.menu-open .menu-toggle-icon span:nth-child(1) {
+		transform: translateY(7px) rotate(45deg);
+	}
+
+	.menu-open .menu-toggle-icon span:nth-child(2) {
+		opacity: 0;
+	}
+
+	.menu-open .menu-toggle-icon span:nth-child(3) {
+		transform: translateY(-7px) rotate(-45deg);
+	}
+
+	#menu ul {
+		display: block;
+		max-height: 0;
+		overflow: hidden;
+		visibility: hidden;
+		transition: max-height 0.25s, visibility 0.25s;
+	}
+
+	#menu.menu-open ul {
+		max-height: 420px;
+		visibility: visible;
+	}
+
+	#menu li {
+		display: block;
+		border-bottom: 0;
+		border-top: 1px solid #222222;
+	}
+
+	#menu a {
+		padding: 0 16px;
+		line-height: 50px;
+		text-align: left;
+		font-size: 14px;
+	}
+
+	#menu .current_page_item a {
+		background: #0B1730;
+		box-shadow: inset 3px 0 0 #7FD4FF;
+	}
+
+	#page {
+		margin: 0 10px;
+		padding: 20px 16px;
+	}
+
+	#logo {
+		font-size: 15px;
+	}
+
+	#logo h1 {
+		font-size: 32px;
+	}
+
+	.post .title {
+		font-size: 22px;
+	}
+}

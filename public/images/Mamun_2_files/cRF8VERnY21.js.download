@@ -1,0 +1,3 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["9qOzT"]); }
+
+__d("PhotoSnowliftViewableWithShieldIconOverlay",["cx","DOM"],(function(a,b,c,d,e,f,g){"use strict";function a(a){a.classList.add("_3016","_ttr","_r1y"),a.appendChild(b("DOM").create("div",{"class":"_r1z"}))}e.exports={setupShieldIconOverlay:a}}),null);

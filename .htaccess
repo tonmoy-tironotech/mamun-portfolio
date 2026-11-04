@@ -1,0 +1,15 @@
+# When the project sits inside a web root, only public/ may be reached.
+# This keeps .env, storage/ and the source code from being downloaded.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Send the project folder itself to the site
+    RewriteCond %{REQUEST_URI} ^(.*)/$
+    RewriteRule ^$ %1/public/ [R=302,L]
+
+    RewriteRule ^(?!public(/|$)) - [F,L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    Require all denied
+</IfModule>
