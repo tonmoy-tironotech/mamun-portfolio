@@ -16,11 +16,13 @@ class StudentController extends Controller
         $search = trim($request->string('search'));
 
         return Inertia::render('Student', [
-            'documents' => Document::search($search)
-                ->latest('id')
-                ->paginate(10)
-                ->withQueryString()
-                ->through(fn (Document $document) => $document->toListArray()),
+            'documents' => $request->user()->isApproved()
+                ? Document::search($search)
+                    ->latest('id')
+                    ->paginate(10)
+                    ->withQueryString()
+                    ->through(fn (Document $document) => $document->toListArray())
+                : null,
             'search' => $search,
         ]);
     }

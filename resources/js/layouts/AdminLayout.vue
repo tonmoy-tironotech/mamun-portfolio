@@ -19,7 +19,10 @@ const page = usePage();
                     Messages
                     <span v-if="page.props.unreadMessages" class="nav-count">{{ page.props.unreadMessages }}</span>
                 </Link>
-                <Link :href="$url('/admin/users')" :class="{ active: page.component.startsWith('admin/users') }">Users</Link>
+                <Link :href="$url('/admin/users')" :class="{ active: page.component.startsWith('admin/users') }">
+                    Users
+                    <span v-if="page.props.pendingUsers" class="nav-count">{{ page.props.pendingUsers }}</span>
+                </Link>
                 <Link :href="$url('/admin/profile')" :class="{ active: page.component === 'admin/Profile' }">Profile</Link>
                 <a :href="$url('/')" target="_blank" rel="noopener">View site</a>
             </nav>

@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
                 'password' => $password,
             ]);
 
-            $user->forceFill(['is_admin' => true])->save();
+            $user->forceFill(['is_admin' => true, 'approved_at' => now()])->save();
 
             $this->command->warn("Admin created: {$user->email} / {$password}");
         }

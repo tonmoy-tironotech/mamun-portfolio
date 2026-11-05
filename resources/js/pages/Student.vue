@@ -6,7 +6,7 @@ import { fileSize } from '../format';
 import SiteLayout from '../layouts/SiteLayout.vue';
 
 const props = defineProps({
-    documents: { type: Object, required: true },
+    documents: { type: Object, default: null },
     search: { type: String, default: '' },
 });
 
@@ -26,6 +26,12 @@ const term = useSearch(props.search, '/student-corner');
                 </div>
             </div>
 
+            <div v-if="!documents" class="review-notice" role="status">
+                <h3>Your account is under review</h3>
+                <p>You will be able to see the documents here once an admin approves your account.</p>
+            </div>
+
+            <template v-else>
             <div class="doc-toolbar">
                 <h3>Documents</h3>
                 <input v-model="term" type="search" placeholder="Search documents" aria-label="Search documents" />
@@ -58,6 +64,7 @@ const term = useSearch(props.search, '/student-corner');
             </div>
 
             <TablePager :pagination="documents" />
+            </template>
         </div>
     </SiteLayout>
 </template>

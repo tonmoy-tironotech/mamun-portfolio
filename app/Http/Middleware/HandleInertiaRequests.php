@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\ContactMessage;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -52,6 +53,9 @@ class HandleInertiaRequests extends Middleware
             'flash' => fn () => ['status' => $request->session()->get('status')],
             'unreadMessages' => fn () => $request->is('admin', 'admin/*') && $request->user()?->is_admin
                 ? ContactMessage::whereNull('read_at')->count()
+                : null,
+            'pendingUsers' => fn () => $request->is('admin', 'admin/*') && $request->user()?->is_admin
+                ? User::pending()->count()
                 : null,
         ];
     }

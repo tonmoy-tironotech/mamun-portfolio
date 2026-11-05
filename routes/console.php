@@ -25,7 +25,7 @@ Artisan::command('user:make-admin {email}', function (string $email) {
     // There is only ever one admin, so this moves the role
     DB::transaction(function () use ($user) {
         User::where('is_admin', true)->update(['is_admin' => false]);
-        $user->forceFill(['is_admin' => true])->save();
+        $user->forceFill(['is_admin' => true, 'approved_at' => now()])->save();
     });
 
     $this->info("{$email} is now the admin.");

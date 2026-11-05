@@ -335,6 +335,11 @@ tr.unread {
     white-space: pre-line;
 }
 
+.badge-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
 .badge-replied {
     background: #e7f6ec;
     color: #14632f;

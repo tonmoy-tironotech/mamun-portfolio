@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureStudentIsApproved;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
@@ -19,7 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
             users: fn (Request $request) => $request->user()->is_admin ? '/admin' : '/student-corner',
         );
 
-        $middleware->alias(['admin' => EnsureUserIsAdmin::class]);
+        $middleware->alias([
+            'admin' => EnsureUserIsAdmin::class,
+            'approved' => EnsureStudentIsApproved::class,
+        ]);
 
         $middleware->web(append: [
             HandleInertiaRequests::class,

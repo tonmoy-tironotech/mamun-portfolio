@@ -40,8 +40,10 @@ Route::middleware('auth')->group(function () {
     Route::inertia('/student-corner/profile', 'StudentProfile')->name('student.profile');
     Route::put('/student-corner/profile', [ProfileController::class, 'update']);
     Route::put('/student-corner/profile/password', [ProfileController::class, 'updatePassword']);
-    Route::get('/student-corner/documents/{document}', [StudentController::class, 'show'])->name('student.documents.show');
-    Route::get('/student-corner/documents/{document}/download', [StudentController::class, 'download'])->name('student.documents.download');
+    Route::middleware('approved')->group(function () {
+        Route::get('/student-corner/documents/{document}', [StudentController::class, 'show'])->name('student.documents.show');
+        Route::get('/student-corner/documents/{document}/download', [StudentController::class, 'download'])->name('student.documents.download');
+    });
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
@@ -54,6 +56,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('documents', AdminDocumentController::class)->except('show');
     Route::resource('publications', AdminPublicationController::class)->except('show');
     Route::resource('users', AdminUserController::class)->only(['index', 'edit', 'update']);
+    Route::post('/users/{user}/approve', [AdminUserController::class, 'approve'])->name('users.approve');
+    Route::delete('/users/{user}/approve', [AdminUserController::class, 'revoke'])->name('users.revoke');
     Route::resource('messages', ContactMessageController::class)->only(['index', 'show', 'destroy']);
     Route::post('/messages/{message}/reply', [ContactMessageController::class, 'reply'])->name('messages.reply');
 });
