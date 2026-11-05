@@ -13,6 +13,7 @@ const props = defineProps({
 const term = useSearch(props.search, '/admin/users');
 
 const approve = (user) => router.post(url(`/admin/users/${user.id}/approve`), {}, { preserveScroll: true });
+const reject = (user) => router.post(url(`/admin/users/${user.id}/reject`), {}, { preserveScroll: true });
 
 const revoke = (user) => {
     if (confirm(`Remove document access for ${user.name}?`)) {
@@ -46,13 +47,15 @@ const revoke = (user) => {
                         <td>
                             <span v-if="user.is_admin" class="badge badge-admin">Admin</span>
                             <span v-else-if="user.is_unverified" class="badge">Unverified</span>
+                            <span v-else-if="user.is_rejected" class="badge badge-rejected">Rejected</span>
                             <span v-else-if="user.is_pending" class="badge badge-pending">Pending</span>
                             <span v-else class="badge badge-replied">Approved</span>
                         </td>
                         <td class="col-date">{{ user.joined }}</td>
                         <td class="col-actions">
-                            <button v-if="user.is_pending" type="button" class="btn" @click="approve(user)">Approve</button>
-                            <button v-else-if="!user.is_admin && !user.is_unverified" type="button" class="btn btn-danger" @click="revoke(user)">Revoke</button>
+                            <button v-if="user.is_pending || user.is_rejected" type="button" class="btn" @click="approve(user)">Approve</button>
+                            <button v-if="user.is_pending" type="button" class="btn btn-danger" @click="reject(user)">Reject</button>
+                            <button v-else-if="!user.is_admin && !user.is_unverified && !user.is_rejected" type="button" class="btn btn-danger" @click="revoke(user)">Revoke</button>
                             <Link :href="$url(`/admin/users/${user.id}/edit`)" class="btn btn-secondary">Edit</Link>
                         </td>
                     </tr>

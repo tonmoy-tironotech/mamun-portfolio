@@ -23,6 +23,7 @@ class StudentController extends Controller
                     ->withQueryString()
                     ->through(fn (Document $document) => $document->toListArray())
                 : null,
+            'isRejected' => $request->user()->rejected_at !== null,
             'search' => $search,
         ]);
     }

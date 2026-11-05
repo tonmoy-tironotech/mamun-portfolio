@@ -7,6 +7,7 @@ import SiteLayout from '../layouts/SiteLayout.vue';
 
 const props = defineProps({
     documents: { type: Object, default: null },
+    isRejected: { type: Boolean, default: false },
     search: { type: String, default: '' },
 });
 
@@ -28,7 +29,12 @@ const term = useSearch(props.search, '/student-corner');
 
             <p v-if="page.props.flash.status" class="form-success" role="status">{{ page.props.flash.status }}</p>
 
-            <div v-if="!documents" class="review-notice" role="status">
+            <div v-if="isRejected" class="review-notice rejected-notice" role="status">
+                <h3>Your account was not approved</h3>
+                <p>You can't see the documents. Please contact us if you think this is a mistake.</p>
+            </div>
+
+            <div v-else-if="!documents" class="review-notice" role="status">
                 <h3>Your account is under review</h3>
                 <p>You will be able to see the documents here once an admin approves your account.</p>
             </div>

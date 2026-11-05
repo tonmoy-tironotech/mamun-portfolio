@@ -1310,6 +1310,15 @@ html:has(.pub-modal[open]) {
 	text-align: center;
 }
 
+.rejected-notice {
+	background: #FEF2F2;
+	border-color: #FECACA;
+}
+
+.rejected-notice h3, .rejected-notice p {
+	color: #991B1B !important;
+}
+
 .review-notice h3 {
 	margin-bottom: 8px;
 	line-height: 1.3;

@@ -62,6 +62,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('users', AdminUserController::class)->only(['index', 'edit', 'update']);
     Route::post('/users/{user}/approve', [AdminUserController::class, 'approve'])->name('users.approve');
     Route::delete('/users/{user}/approve', [AdminUserController::class, 'revoke'])->name('users.revoke');
+    Route::post('/users/{user}/reject', [AdminUserController::class, 'reject'])->name('users.reject');
     Route::resource('messages', ContactMessageController::class)->only(['index', 'show', 'destroy']);
     Route::post('/messages/{message}/reply', [ContactMessageController::class, 'reply'])->name('messages.reply');
 });

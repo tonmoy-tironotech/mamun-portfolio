@@ -127,4 +127,59 @@ class StudentApprovalTest extends TestCase
             ->get("/student-corner/documents/{$document->id}")
             ->assertOk();
     }
+
+    public function test_admin_can_reject_a_pending_student(): void
+    {
+        $document = $this->document();
+        $student = User::factory()->pending()->create();
+
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+
+        $this->post("/admin/users/{$student->id}/reject")->assertSessionHas('status');
+        $this->assertNotNull($student->fresh()->rejected_at);
+
+        $this->get('/admin/users')->assertInertia(fn (Assert $page) => $page
+            ->where('pendingUsers', 0)
+            ->where('users.data.1.is_rejected', true)
+            ->where('users.data.1.is_pending', false));
+
+        $this->actingAs($student->fresh());
+        $this->get('/student-corner')->assertInertia(fn (Assert $page) => $page
+            ->where('documents', null)
+            ->where('isRejected', true));
+        $this->get("/student-corner/documents/{$document->id}")->assertRedirect('/student-corner');
+        $this->get("/student-corner/documents/{$document->id}/download")->assertRedirect('/student-corner');
+    }
+
+    public function test_rejected_student_can_be_approved_later(): void
+    {
+        $student = User::factory()->rejected()->create();
+
+        $this->actingAs(User::factory()->create(['is_admin' => true]))
+            ->post("/admin/users/{$student->id}/approve")
+            ->assertSessionHas('status');
+
+        $student->refresh();
+        $this->assertNull($student->rejected_at);
+        $this->assertTrue($student->isApproved());
+
+        $this->actingAs($student)->get('/student-corner')->assertInertia(fn (Assert $page) => $page
+            ->where('isRejected', false)
+            ->has('documents.data', 0));
+    }
+
+    public function test_only_admins_can_reject_and_the_admin_cannot_be_rejected(): void
+    {
+        $pending = User::factory()->pending()->create();
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        $this->post("/admin/users/{$pending->id}/reject")->assertRedirect('/login');
+        $this->actingAs(User::factory()->create())
+            ->post("/admin/users/{$pending->id}/reject")
+            ->assertRedirect('/student-corner');
+        $this->assertNull($pending->fresh()->rejected_at);
+
+        $this->actingAs($admin)->post("/admin/users/{$admin->id}/reject")->assertSessionHas('status');
+        $this->assertNull($admin->fresh()->rejected_at);
+    }
 }

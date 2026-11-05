@@ -35,6 +35,14 @@ class UserFactory extends Factory
     }
 
     /**
+     * A student whose account an admin turned down.
+     */
+    public function rejected(): static
+    {
+        return $this->state(fn (array $attributes) => ['approved_at' => null, 'rejected_at' => now()]);
+    }
+
+    /**
      * A student who signed up and is waiting for approval.
      */
     public function pending(): static

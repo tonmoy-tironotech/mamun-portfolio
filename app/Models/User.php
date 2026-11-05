@@ -101,7 +101,10 @@ class User extends Authenticatable
      */
     public function scopePending(Builder $query): void
     {
-        $query->where('is_admin', false)->whereNotNull('email_verified_at')->whereNull('approved_at');
+        $query->where('is_admin', false)
+            ->whereNotNull('email_verified_at')
+            ->whereNull('approved_at')
+            ->whereNull('rejected_at');
     }
 
     /**
@@ -124,6 +127,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_admin' => 'boolean',
             'approved_at' => 'datetime',
+            'rejected_at' => 'datetime',
             'email_verification_expires_at' => 'datetime',
             'email_verification_sent_at' => 'datetime',
         ];

@@ -24,14 +24,15 @@ class UserController extends Controller
                     $query->where('name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%");
                 }))
-                ->orderByRaw('case when is_admin = 0 and email_verified_at is not null and approved_at is null then 0 else 1 end')
+                ->orderByRaw('case when is_admin = 0 and email_verified_at is not null and approved_at is null and rejected_at is null then 0 else 1 end')
                 ->latest('id')
                 ->paginate(10)
                 ->withQueryString()
                 ->through(fn (User $user) => [
                     ...$user->only('id', 'name', 'email', 'is_admin'),
                     'is_unverified' => ! $user->hasVerifiedEmail(),
-                    'is_pending' => $user->hasVerifiedEmail() && ! $user->isApproved(),
+                    'is_rejected' => $user->rejected_at !== null,
+                    'is_pending' => $user->hasVerifiedEmail() && ! $user->isApproved() && $user->rejected_at === null,
                     'joined' => $user->created_at?->format('d M Y'),
                 ]),
             'search' => $search,
@@ -70,9 +71,20 @@ class UserController extends Controller
             return back()->with('status', "{$user->name} has not verified their email yet.");
         }
 
-        $user->forceFill(['approved_at' => now()])->save();
+        $user->forceFill(['approved_at' => now(), 'rejected_at' => null])->save();
 
         return back()->with('status', "{$user->name} can now see the documents.");
+    }
+
+    public function reject(User $user): RedirectResponse
+    {
+        if ($user->is_admin) {
+            return back()->with('status', 'The admin account cannot be rejected.');
+        }
+
+        $user->forceFill(['approved_at' => null, 'rejected_at' => now()])->save();
+
+        return back()->with('status', "{$user->name} has been rejected.");
     }
 
     public function revoke(User $user): RedirectResponse

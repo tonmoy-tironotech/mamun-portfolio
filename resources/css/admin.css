@@ -340,6 +340,11 @@ tr.unread {
     color: #92400e;
 }
 
+.badge-rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
 .badge-replied {
     background: #e7f6ec;
     color: #14632f;
