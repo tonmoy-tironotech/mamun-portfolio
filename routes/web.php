@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\PublicationController as AdminPublicationController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
@@ -36,11 +37,14 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/student-corner', [StudentController::class, 'index'])->name('student');
+    Route::get('/verify-email', [EmailVerificationController::class, 'show'])->name('verification.notice');
+    Route::post('/verify-email', [EmailVerificationController::class, 'verify'])->middleware('throttle:10,1')->name('verification.verify');
+    Route::post('/verify-email/resend', [EmailVerificationController::class, 'resend'])->middleware('throttle:6,1')->name('verification.resend');
+    Route::get('/student-corner', [StudentController::class, 'index'])->middleware('email.verified')->name('student');
     Route::inertia('/student-corner/profile', 'StudentProfile')->name('student.profile');
     Route::put('/student-corner/profile', [ProfileController::class, 'update']);
     Route::put('/student-corner/profile/password', [ProfileController::class, 'updatePassword']);
-    Route::middleware('approved')->group(function () {
+    Route::middleware(['email.verified', 'approved'])->group(function () {
         Route::get('/student-corner/documents/{document}', [StudentController::class, 'show'])->name('student.documents.show');
         Route::get('/student-corner/documents/{document}/download', [StudentController::class, 'download'])->name('student.documents.download');
     });

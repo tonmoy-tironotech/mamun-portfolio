@@ -1324,6 +1324,46 @@ html:has(.pub-modal[open]) {
 }
 
 
+/* Email verification */
+
+.code-input {
+	letter-spacing: 8px;
+	text-align: center;
+	font-size: 22px !important;
+	font-weight: 600;
+}
+
+.link-button {
+	padding: 0;
+	background: none;
+	border: 0;
+	text-decoration: underline;
+	font: inherit;
+	font-weight: 700;
+	color: #0B5394;
+	cursor: pointer;
+}
+
+.link-button:disabled {
+	text-decoration: none;
+	font-weight: 400;
+	color: #64748B;
+	cursor: default;
+}
+
+.verify-links {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 8px 20px;
+	margin-top: 10px;
+}
+
+.verify-links a {
+	font-weight: 600;
+}
+
+
 /* Responsive */
 
 @media (max-width: 1300px) {

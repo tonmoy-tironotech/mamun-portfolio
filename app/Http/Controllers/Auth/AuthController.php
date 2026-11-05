@@ -79,7 +79,9 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return to_route('student');
+        $user->sendEmailVerificationCode();
+
+        return to_route('verification.notice');
     }
 
     public function logout(Request $request): SymfonyResponse

@@ -136,7 +136,7 @@ class AdminTest extends TestCase
             'password' => 'brand-new-password',
             'password_confirmation' => 'brand-new-password',
             'is_admin' => true,
-        ])->assertRedirect('/student-corner');
+        ])->assertRedirect('/verify-email');
 
         $this->assertFalse(User::firstWhere('email', 'student@example.com')->is_admin);
     }
@@ -148,11 +148,11 @@ class AdminTest extends TestCase
             'email' => 'student@example.com',
             'password' => 'brand-new-password',
             'password_confirmation' => 'brand-new-password',
-        ])->assertRedirect('/student-corner');
+        ])->assertRedirect('/verify-email');
 
         $this->assertAuthenticated();
         $this->assertTrue(Hash::check('brand-new-password', User::firstWhere('email', 'student@example.com')->password));
-        $this->get('/student-corner')->assertOk();
+        $this->get('/verify-email')->assertOk();
     }
 
     public function test_sign_up_validates_input(): void

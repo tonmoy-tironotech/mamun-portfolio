@@ -18,10 +18,23 @@ class ProfileController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
-        $request->user()->update($request->validate([
+        $user = $request->user();
+
+        $user->fill($request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($request->user())],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user)],
         ]));
+
+        $emailChanged = $user->isDirty('email');
+
+        if ($emailChanged && ! $user->is_admin) {
+            $user->forceFill(['email_verified_at' => null])->save();
+            $user->sendEmailVerificationCode();
+
+            return to_route('verification.notice');
+        }
+
+        $user->save();
 
         return back()->with('status', 'Profile updated.');
     }

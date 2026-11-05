@@ -160,8 +160,7 @@ class UsersAndProfileTest extends TestCase
 
         $this->from('/student-corner/profile')
             ->put('/student-corner/profile', ['name' => 'Updated', 'email' => 'updated@example.com', 'is_admin' => true])
-            ->assertRedirect('/student-corner/profile')
-            ->assertSessionHas('status');
+            ->assertRedirect('/verify-email');
 
         $student->refresh();
         $this->assertSame('Updated', $student->name);

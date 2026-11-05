@@ -45,13 +45,14 @@ const revoke = (user) => {
                         <td class="col-email">{{ user.email }}</td>
                         <td>
                             <span v-if="user.is_admin" class="badge badge-admin">Admin</span>
+                            <span v-else-if="user.is_unverified" class="badge">Unverified</span>
                             <span v-else-if="user.is_pending" class="badge badge-pending">Pending</span>
                             <span v-else class="badge badge-replied">Approved</span>
                         </td>
                         <td class="col-date">{{ user.joined }}</td>
                         <td class="col-actions">
                             <button v-if="user.is_pending" type="button" class="btn" @click="approve(user)">Approve</button>
-                            <button v-else-if="!user.is_admin" type="button" class="btn btn-danger" @click="revoke(user)">Revoke</button>
+                            <button v-else-if="!user.is_admin && !user.is_unverified" type="button" class="btn btn-danger" @click="revoke(user)">Revoke</button>
                             <Link :href="$url(`/admin/users/${user.id}/edit`)" class="btn btn-secondary">Edit</Link>
                         </td>
                     </tr>

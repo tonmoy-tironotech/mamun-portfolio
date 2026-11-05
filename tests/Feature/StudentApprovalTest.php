@@ -43,13 +43,9 @@ class StudentApprovalTest extends TestCase
             'password' => 'brand-new-password',
             'password_confirmation' => 'brand-new-password',
             'approved_at' => now()->toDateTimeString(),
-        ])->assertRedirect('/student-corner');
+        ])->assertRedirect('/verify-email');
 
         $this->assertNull(User::firstWhere('email', 'student@example.com')->approved_at);
-
-        $this->get('/student-corner')->assertOk()->assertInertia(fn (Assert $page) => $page
-            ->component('Student')
-            ->where('documents', null));
     }
 
     public function test_pending_student_cannot_reach_any_document(): void

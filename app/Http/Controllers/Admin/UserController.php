@@ -24,13 +24,14 @@ class UserController extends Controller
                     $query->where('name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%");
                 }))
-                ->orderByRaw('case when is_admin = 0 and approved_at is null then 0 else 1 end')
+                ->orderByRaw('case when is_admin = 0 and email_verified_at is not null and approved_at is null then 0 else 1 end')
                 ->latest('id')
                 ->paginate(10)
                 ->withQueryString()
                 ->through(fn (User $user) => [
                     ...$user->only('id', 'name', 'email', 'is_admin'),
-                    'is_pending' => ! $user->isApproved(),
+                    'is_unverified' => ! $user->hasVerifiedEmail(),
+                    'is_pending' => $user->hasVerifiedEmail() && ! $user->isApproved(),
                     'joined' => $user->created_at?->format('d M Y'),
                 ]),
             'search' => $search,
@@ -65,6 +66,10 @@ class UserController extends Controller
 
     public function approve(User $user): RedirectResponse
     {
+        if (! $user->hasVerifiedEmail()) {
+            return back()->with('status', "{$user->name} has not verified their email yet.");
+        }
+
         $user->forceFill(['approved_at' => now()])->save();
 
         return back()->with('status', "{$user->name} can now see the documents.");

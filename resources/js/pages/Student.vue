@@ -26,6 +26,8 @@ const term = useSearch(props.search, '/student-corner');
                 </div>
             </div>
 
+            <p v-if="page.props.flash.status" class="form-success" role="status">{{ page.props.flash.status }}</p>
+
             <div v-if="!documents" class="review-notice" role="status">
                 <h3>Your account is under review</h3>
                 <p>You will be able to see the documents here once an admin approves your account.</p>
