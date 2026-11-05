@@ -21,7 +21,7 @@ Route::inertia('/experience', 'Experience')->name('experience');
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects');
 Route::get('/projects/{project:slug}', [ProjectController::class, 'show'])->name('projects.show');
 Route::get('/publications', [PublicationController::class, 'index'])->name('publications');
-Route::get('/publications/files/{file}', [PublicationController::class, 'file'])->name('publications.files.show');
+Route::get('/publications/{publication}/pdf', [PublicationController::class, 'pdf'])->name('publications.pdf');
 Route::inertia('/hobbies', 'Hobbies')->name('hobbies');
 Route::inertia('/contact', 'Contact')->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1');
@@ -68,4 +68,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('/messages/{message}/reply', [ContactMessageController::class, 'reply'])->name('messages.reply');
 });
 
-
+// Keep links to the old static .html pages working
+foreach ([
+    '/index.html' => 'home',
+    '/Education.html' => 'education',
+    '/Experience.html' => 'experience',
+    '/Projects.html' => 'projects',
+    '/Publications.html' => 'publications',
+    '/StudentCorner.html' => 'student',
+    '/student' => 'student',
+    '/Hobbies.html' => 'hobbies',
+    '/Contact.html' => 'contact',
+    '/admin/login' => 'login',
+] as $oldPath => $routeName) {
+    Route::get($oldPath, fn () => to_route($routeName, status: 301));
+}

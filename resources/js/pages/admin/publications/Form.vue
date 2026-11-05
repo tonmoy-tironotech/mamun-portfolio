@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { computed, defineAsyncComponent, ref } from 'vue';
+import { computed, defineAsyncComponent } from 'vue';
 import { fileSize } from '../../../format';
 import AdminLayout from '../../../layouts/AdminLayout.vue';
 import { url } from '../../../url';
@@ -20,41 +20,17 @@ const form = useForm({
     type: props.publication?.type ?? Object.keys(props.types)[0],
     title: props.publication?.title ?? '',
     description: props.publication?.description ?? '',
-    files: [],
-    remove_files: [],
+    link_url: props.publication?.link_url ?? '',
+    pdf: null,
+    remove_pdf: false,
 });
 
-const existingFiles = computed(() => props.publication?.files ?? []);
-const fileErrors = computed(() => Object.entries(form.errors).filter(([key]) => key === 'files' || key.startsWith('files.')).map(([, message]) => message));
-
-// Each row is one PDF to upload; "Add another PDF" adds a row
-let rowId = 0;
-const rows = ref([{ id: rowId++, file: null, label: '' }]);
-
-const addRow = () => rows.value.push({ id: rowId++, file: null, label: '' });
-
-const removeRow = (id) => {
-    rows.value = rows.value.filter((row) => row.id !== id);
-
-    // Always keep one empty row to pick a file with
-    if (!rows.value.length) {
-        addRow();
-    }
-};
-
-const toggleRemove = (id) => {
-    form.remove_files = form.remove_files.includes(id) ? form.remove_files.filter((i) => i !== id) : [...form.remove_files, id];
-};
-
 const submit = () => {
-    // Rows without a chosen file are ignored
-    const files = rows.value.filter((row) => row.file).map(({ file, label }) => ({ file, label }));
-
     // Browsers can't send files with PUT, so the update is posted with a method override
     if (isEditing.value) {
-        form.transform((data) => ({ ...data, files, _method: 'put' })).post(url(`/admin/publications/${props.publication.id}`), { forceFormData: true });
+        form.transform((data) => ({ ...data, _method: 'put' })).post(url(`/admin/publications/${props.publication.id}`), { forceFormData: true });
     } else {
-        form.transform((data) => ({ ...data, files })).post(url('/admin/publications'), { forceFormData: true });
+        form.post(url('/admin/publications'), { forceFormData: true });
     }
 };
 </script>
@@ -77,31 +53,22 @@ const submit = () => {
             <RichEditor id="description" v-model="form.description" min-height="180px" />
             <p v-if="form.errors.description" class="field-error">{{ form.errors.description }}</p>
 
-            <label>PDFs</label>
-            <ul v-if="existingFiles.length" class="file-list">
-                <li v-for="file in existingFiles" :key="file.id" :class="{ removed: form.remove_files.includes(file.id) }">
-                    <a :href="$url(`/publications/files/${file.id}`)" target="_blank" rel="noopener">[{{ file.label }}]</a>
-                    {{ file.file_name }} ({{ fileSize(file.file_size) }})
-                    <button type="button" class="btn btn-secondary" @click="toggleRemove(file.id)">
-                        {{ form.remove_files.includes(file.id) ? 'Undo' : 'Remove' }}
-                    </button>
-                </li>
-            </ul>
-            <div v-for="(row, index) in rows" :key="row.id" class="file-row">
-                <input
-                    type="file"
-                    accept="application/pdf,.pdf"
-                    :aria-label="`PDF ${index + 1}`"
-                    @change="row.file = $event.target.files[0] ?? null"
-                />
-                <input v-model="row.label" type="text" maxlength="50" :placeholder="`Name (optional, default pdf${existingFiles.length + index + 1})`" />
-                <button type="button" class="btn btn-secondary" @click="removeRow(row.id)">Remove</button>
-            </div>
-            <div class="actions">
-                <button type="button" class="btn btn-secondary" @click="addRow">+ Add another PDF</button>
-            </div>
-            <p class="field-hint">Each PDF shows on the site as a link after the description. Leave the name empty to get [pdf1] [pdf2] ... Up to 20 MB each.</p>
-            <p v-for="message in fileErrors" :key="message" class="field-error">{{ message }}</p>
+            <label for="pdf">PDF (optional)</label>
+            <p v-if="publication?.has_pdf" class="field-hint">
+                Current: <a :href="$url(`/publications/${publication.id}/pdf`)" target="_blank" rel="noopener">{{ publication.pdf_name }}</a> ({{ fileSize(publication.pdf_size) }}).
+                Choose a file only to replace it.
+            </p>
+            <input id="pdf" type="file" accept="application/pdf,.pdf" @change="form.pdf = $event.target.files[0] ?? null" />
+            <p v-if="publication?.has_pdf" class="field-hint">
+                <label class="checkbox-label"><input v-model="form.remove_pdf" type="checkbox" /> Remove the current PDF</label>
+            </p>
+            <p class="field-hint">One PDF, up to 20 MB. It shows on the site as a PDF icon.</p>
+            <p v-if="form.errors.pdf" class="field-error">{{ form.errors.pdf }}</p>
+
+            <label for="link_url">Link (optional)</label>
+            <input id="link_url" v-model="form.link_url" type="url" maxlength="2000" placeholder="https://" />
+            <p class="field-hint">One web link. It shows on the site as a link icon.</p>
+            <p v-if="form.errors.link_url" class="field-error">{{ form.errors.link_url }}</p>
 
             <div class="actions">
                 <button type="submit" class="btn" :disabled="form.processing">Save</button>

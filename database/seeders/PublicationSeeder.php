@@ -23,21 +23,19 @@ class PublicationSeeder extends Seeder
 
         // Newest publications are listed first, so insert in reverse to keep the order
         foreach (array_reverse(require database_path('data/publications.php')) as $publication) {
-            $files = Arr::pull($publication, 'files', []);
-            $created = Publication::create($publication);
+            $pdf = Arr::pull($publication, 'pdf');
+            $link = Arr::pull($publication, 'link');
 
-            foreach ($files as $file) {
-                $source = public_path($file);
-                $path = 'publications/'.uniqid().'-'.$file;
+            if ($pdf !== null) {
+                $source = public_path($pdf);
+                $path = 'publications/'.uniqid().'-'.$pdf;
 
                 Storage::disk('local')->put($path, file_get_contents($source));
 
-                $created->files()->create([
-                    'file_path' => $path,
-                    'file_name' => $file,
-                    'file_size' => filesize($source),
-                ]);
+                $publication = [...$publication, 'pdf_path' => $path, 'pdf_name' => $pdf, 'pdf_size' => filesize($source)];
             }
+
+            Publication::create([...$publication, 'link_url' => $link]);
         }
     }
 }

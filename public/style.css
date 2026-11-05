@@ -1059,20 +1059,27 @@ a:hover {
 	list-style-position: outside;
 }
 
-.pub-body p.pub-files {
-	margin: 6px 0 0;
+.pub-body p.pub-links {
+	margin: 8px 0 0;
 }
 
-.pub-files a {
-	font-weight: 700;
-	color: #0B5394;
+.pub-links {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px;
 }
 
-.pub-files a:hover {
-	color: #083F70;
+.pub-links a {
+	display: inline-flex;
+	transition: transform 0.15s;
 }
 
-.pub-modal-files {
+.pub-links a:hover {
+	transform: translateY(-2px);
+}
+
+.pub-modal-links {
 	flex: none;
 	margin: 0;
 	padding: 12px 24px 18px;

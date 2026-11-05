@@ -1,16 +1,20 @@
 <?php
 
 // Initial publications, newest first within each type. Loaded by PublicationSeeder.
+// 'pdf' (a PDF in public/) and 'link' (a web address) are optional and show as icons. The PDFs are sample files for now; replace them from the admin.
 return [
     [
         'type' => 'journal',
         'title' => 'A Spectrogram Orthogonal Polynomial Measure (SOPM) for the Prediction of Speech Intelligibility and Quality',
         'description' => '<p><strong>Nursadul Mamun</strong>, S. A. Zilany. Submitted to JASA, 2020.</p>',
+        'pdf' => 'Nursadul_Mamun_CV.pdf',
     ],
     [
         'type' => 'journal',
         'title' => 'Prediction of Speech Intelligibility Using a Neurogram Orthogonal Polynomial Measure (NOPM)',
         'description' => '<p><strong>Nursadul Mamun</strong>, W. A. Jassim, S. A. Zilany. <a href="https://ieeexplore.ieee.org/abstract/document/7035038?casa_token=jVAMcgeihvcAAAAA:po81GqG9J3TocjFUKnDqdWfG8iwciLEbNNjku8X99AdeZH7Gu9CyCn-_EAoDE5AhOX0UmUvB">IEEE Transaction on Audio, Speech, and Language Processing</a>, 2015 (ISI/SCOPUS Cited Publication), vol. 23(4), pp. 760-773.</p>',
+        'pdf' => '2020-Resume-Nursadul-Mamun-July-2020.pdf',
+        'link' => 'https://ieeexplore.ieee.org/abstract/document/7035038',
     ],
     [
         'type' => 'journal',
@@ -26,6 +30,7 @@ return [
         'type' => 'conference',
         'title' => 'Convolutional Neural Network-based Speech Enhancement for Cochlear Implant Recipients',
         'description' => '<p><strong>Nursadul Mamun</strong>, Soheil Khorram, John H.L. Hansen. INTERSPEECH 2019, 15-19 September 2019, Graz, Austria.</p>',
+        'pdf' => '2020-Nursadul-Mamun-Resume-Internship-2020.pdf',
     ],
     [
         'type' => 'conference',

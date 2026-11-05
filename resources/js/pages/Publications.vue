@@ -1,8 +1,8 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
 import { nextTick, ref } from 'vue';
-import PublicationFiles from '../components/PublicationFiles.vue';
 import PublicationItem from '../components/PublicationItem.vue';
+import PublicationLinks from '../components/PublicationLinks.vue';
 import TablePager from '../components/TablePager.vue';
 import { useSearch } from '../composables/useSearch';
 import SiteLayout from '../layouts/SiteLayout.vue';
@@ -88,7 +88,7 @@ const tabHref = (type) => {
                         <button type="button" class="pub-modal-close" aria-label="Close" @click="modal.close()">&times;</button>
                     </div>
                     <div class="pub-modal-body rich-text" tabindex="0" v-html="selected.description"></div>
-                    <PublicationFiles :files="selected.files" class="pub-modal-files" />
+                    <PublicationLinks :publication="selected" class="pub-modal-links" />
                 </template>
             </dialog>
         </div>

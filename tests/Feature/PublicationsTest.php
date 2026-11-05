@@ -49,7 +49,8 @@ class PublicationsTest extends TestCase
         $this->seed(PublicationSeeder::class);
 
         $this->assertDatabaseCount('publications', 10);
-        $this->assertDatabaseCount('publication_files', 6);
+        $this->assertSame(3, Publication::whereNotNull('pdf_path')->count());
+        $this->assertSame(1, Publication::whereNotNull('link_url')->count());
     }
 
     public function test_unknown_type_falls_back_to_the_first_tab(): void
@@ -162,81 +163,88 @@ class PublicationsTest extends TestCase
         $this->assertDatabaseCount('publications', 1);
     }
 
-    public function test_admin_can_attach_several_pdfs_and_they_are_labelled_in_order(): void
+    public function test_admin_can_attach_a_pdf_and_a_link(): void
     {
         Storage::fake('local');
         $this->actingAs($this->admin());
 
         $this->post('/admin/publications', [
             'type' => 'journal',
-            'title' => 'With files',
+            'title' => 'With extras',
             'description' => '<p>Text</p>',
-            'files' => [
-                ['file' => UploadedFile::fake()->create('a.pdf', 100, 'application/pdf'), 'label' => ''],
-                ['file' => UploadedFile::fake()->create('b.pdf', 100, 'application/pdf'), 'label' => 'Preprint'],
-            ],
+            'pdf' => UploadedFile::fake()->create('paper.pdf', 100, 'application/pdf'),
+            'link_url' => 'https://example.com/paper',
         ])->assertRedirect('/admin/publications');
 
-        $publication = Publication::firstWhere('title', 'With files');
-        $this->assertCount(2, $publication->files);
-        Storage::disk('local')->assertExists($publication->files[0]->file_path);
+        $publication = Publication::firstWhere('title', 'With extras');
+        Storage::disk('local')->assertExists($publication->pdf_path);
+        $this->assertSame('paper.pdf', $publication->pdf_name);
 
         $this->get('/publications')->assertInertia(fn (Assert $page) => $page
-            ->where('publications.data.0.files.0.label', 'pdf1')
-            ->where('publications.data.0.files.1.label', 'Preprint')
-            ->missing('publications.data.0.files.0.file_path'));
+            ->where('publications.data.0.has_pdf', true)
+            ->where('publications.data.0.link_url', 'https://example.com/paper')
+            ->missing('publications.data.0.pdf_path'));
 
-        $this->get("/publications/files/{$publication->files[0]->id}")->assertOk()->assertHeader('Content-Type', 'application/pdf');
+        $this->get("/publications/{$publication->id}/pdf")->assertOk()->assertHeader('Content-Type', 'application/pdf');
     }
 
-    public function test_pdfs_can_be_added_and_removed_when_editing(): void
+    public function test_a_publication_without_a_pdf_has_no_pdf_download(): void
+    {
+        $publication = $this->makePublication();
+
+        $this->get("/publications/{$publication->id}/pdf")->assertNotFound();
+        $this->get('/publications')->assertInertia(fn (Assert $page) => $page
+            ->where('publications.data.0.has_pdf', false)
+            ->where('publications.data.0.link_url', null));
+    }
+
+    public function test_pdf_can_be_replaced_and_removed_when_editing(): void
     {
         Storage::fake('local');
         $this->actingAs($this->admin());
-        $publication = $this->makePublication();
-        $publication->files()->create(['file_path' => 'publications/old.pdf', 'file_name' => 'old.pdf', 'file_size' => 1]);
         Storage::disk('local')->put('publications/old.pdf', 'x');
-        $old = $publication->files()->first();
+        $publication = $this->makePublication(['pdf_path' => 'publications/old.pdf', 'pdf_name' => 'old.pdf', 'pdf_size' => 1]);
+        $fields = ['type' => 'journal', 'title' => 'A paper', 'description' => '<p>Some authors</p>'];
 
-        $this->put("/admin/publications/{$publication->id}", [
-            'type' => 'journal',
-            'title' => 'A paper',
-            'description' => '<p>Some authors</p>',
-            'remove_files' => [$old->id],
-            'files' => [['file' => UploadedFile::fake()->create('new.pdf', 100, 'application/pdf')]],
-        ])->assertRedirect('/admin/publications');
+        $this->put("/admin/publications/{$publication->id}", [...$fields, 'pdf' => UploadedFile::fake()->create('new.pdf', 100, 'application/pdf')])
+            ->assertRedirect('/admin/publications');
 
-        $files = $publication->fresh()->files;
-        $this->assertCount(1, $files);
-        $this->assertSame('new.pdf', $files[0]->file_name);
+        $publication->refresh();
+        $this->assertSame('new.pdf', $publication->pdf_name);
         Storage::disk('local')->assertMissing('publications/old.pdf');
+        Storage::disk('local')->assertExists($publication->pdf_path);
+
+        $this->put("/admin/publications/{$publication->id}", [...$fields, 'remove_pdf' => true])->assertRedirect('/admin/publications');
+
+        $this->assertNull($publication->fresh()->pdf_path);
+        $this->assertSame([], Storage::disk('local')->files('publications'));
     }
 
-    public function test_deleting_a_publication_removes_its_pdfs(): void
+    public function test_deleting_a_publication_removes_its_pdf(): void
     {
         Storage::fake('local');
         $this->actingAs($this->admin());
-        $publication = $this->makePublication();
         Storage::disk('local')->put('publications/x.pdf', 'x');
-        $publication->files()->create(['file_path' => 'publications/x.pdf', 'file_name' => 'x.pdf', 'file_size' => 1]);
+        $publication = $this->makePublication(['pdf_path' => 'publications/x.pdf', 'pdf_name' => 'x.pdf', 'pdf_size' => 1]);
 
         $this->delete("/admin/publications/{$publication->id}");
 
         Storage::disk('local')->assertMissing('publications/x.pdf');
-        $this->assertDatabaseCount('publication_files', 0);
+        $this->assertDatabaseCount('publications', 0);
     }
 
-    public function test_only_pdfs_are_accepted(): void
+    public function test_only_a_pdf_and_a_web_link_are_accepted(): void
     {
         Storage::fake('local');
         $this->actingAs($this->admin());
 
         $this->post('/admin/publications', [
             'type' => 'journal',
-            'title' => 'Bad file',
+            'title' => 'Bad input',
             'description' => '<p>Text</p>',
-            'files' => [['file' => UploadedFile::fake()->create('a.exe', 10, 'application/octet-stream')]],
-        ])->assertSessionHasErrors('files.0.file');
+            'pdf' => UploadedFile::fake()->create('a.exe', 10, 'application/octet-stream'),
+            'link_url' => 'javascript:alert(1)',
+        ])->assertSessionHasErrors(['pdf', 'link_url']);
 
         $this->assertDatabaseCount('publications', 0);
     }
