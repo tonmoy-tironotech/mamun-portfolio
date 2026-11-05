@@ -206,6 +206,27 @@ form .btn {
     font-size: 13px;
 }
 
+/* Publication PDFs */
+
+.file-list {
+    margin: 8px 0;
+    padding: 0;
+    list-style: none;
+}
+
+.file-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+}
+
+.file-list li.removed {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
 /* Projects */
 
 .toolbar {

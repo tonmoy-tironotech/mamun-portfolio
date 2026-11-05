@@ -1,4 +1,3 @@
-
 /*
 Design by TEMPLATED
 http://templated.co
@@ -21,7 +20,7 @@ h1, h2, h3, h4 {
 	/*text-transform: uppercase;*/
 	font-family: 'Bree Serif', Georgia, serif;
 	font-weight: normal;
-	
+
 	color: #000045;
 }
 
@@ -37,7 +36,7 @@ h2 {
 
 h3 {
 	font-size: 1.6em;
-	
+
 }
 
 p, ul, ol {
@@ -1058,6 +1057,26 @@ a:hover {
 
 .pub-body ul, .pub-body ol, .pub-modal-body ul, .pub-modal-body ol {
 	list-style-position: outside;
+}
+
+.pub-body p.pub-files {
+	margin: 6px 0 0;
+}
+
+.pub-files a {
+	font-weight: 700;
+	color: #0B5394;
+}
+
+.pub-files a:hover {
+	color: #083F70;
+}
+
+.pub-modal-files {
+	flex: none;
+	margin: 0;
+	padding: 12px 24px 18px;
+	border-top: 1px solid #E2E8F0;
 }
 
 .pub-more {

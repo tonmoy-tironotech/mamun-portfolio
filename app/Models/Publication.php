@@ -6,6 +6,7 @@ use App\Support\Html;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['type', 'title', 'description'])]
 class Publication extends Model
@@ -15,6 +16,14 @@ class Publication extends Model
         'conference' => 'Conference Papers',
         'abstract' => 'Conference Abstracts/Presentations',
     ];
+
+    /**
+     * @return HasMany<PublicationFile, $this>
+     */
+    public function files(): HasMany
+    {
+        return $this->hasMany(PublicationFile::class)->orderBy('id');
+    }
 
     /**
      * @param  Builder<Publication>  $query
@@ -36,6 +45,22 @@ class Publication extends Model
             'id' => $this->id,
             'title' => $this->title,
             'description' => Html::clean($this->description),
+            'files' => $this->filesArray(),
         ];
+    }
+
+    /**
+     * PDFs are labelled pdf1, pdf2, ... in upload order.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function filesArray(): array
+    {
+        return $this->files->values()->map(fn (PublicationFile $file, int $index) => [
+            'id' => $file->id,
+            'label' => 'pdf'.($index + 1),
+            'file_name' => $file->file_name,
+            'file_size' => $file->file_size,
+        ])->all();
     }
 }

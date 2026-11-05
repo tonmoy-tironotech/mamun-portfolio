@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Publication;
+use App\Models\PublicationFile;
 use App\Support\Html;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -40,7 +43,8 @@ class PublicationController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        Publication::create($this->validated($request));
+        $publication = Publication::create(Arr::except($this->validated($request), ['files', 'remove_files']));
+        $this->storeFiles($request, $publication);
 
         return to_route('admin.publications.index')->with('status', 'Publication created.');
     }
@@ -52,19 +56,27 @@ class PublicationController extends Controller
             'publication' => [
                 ...$publication->only('id', 'type', 'title'),
                 'description' => Html::clean($publication->description),
+                'files' => $publication->filesArray(),
             ],
         ]);
     }
 
     public function update(Request $request, Publication $publication): RedirectResponse
     {
-        $publication->update($this->validated($request));
+        $publication->update(Arr::except($this->validated($request), ['files', 'remove_files']));
+
+        $publication->files()->whereKey($request->input('remove_files', []))->get()->each(function (PublicationFile $file) {
+            Storage::disk('local')->delete($file->file_path);
+            $file->delete();
+        });
+        $this->storeFiles($request, $publication);
 
         return to_route('admin.publications.index')->with('status', 'Publication updated.');
     }
 
     public function destroy(Publication $publication): RedirectResponse
     {
+        $publication->files->each(fn (PublicationFile $file) => Storage::disk('local')->delete($file->file_path));
         $publication->delete();
 
         return back()->with('status', 'Publication deleted.');
@@ -81,6 +93,25 @@ class PublicationController extends Controller
             'type' => ['required', Rule::in(array_keys(Publication::TYPES))],
             'title' => ['required', 'string', 'max:500'],
             'description' => ['required', 'string', 'max:60000'],
+            'files' => ['nullable', 'array', 'max:20'],
+            'files.*' => ['file', 'mimes:pdf', 'max:20480'],
+            'remove_files' => ['nullable', 'array'],
+            'remove_files.*' => ['integer'],
         ]);
+    }
+
+    /**
+     * Uploaded PDFs go on the private disk and are served through the public
+     * publications file route, so storage:link isn't needed.
+     */
+    private function storeFiles(Request $request, Publication $publication): void
+    {
+        foreach ($request->file('files', []) as $file) {
+            $publication->files()->create([
+                'file_path' => $file->store('publications', 'local'),
+                'file_name' => basename($file->getClientOriginalName()),
+                'file_size' => $file->getSize(),
+            ]);
+        }
     }
 }

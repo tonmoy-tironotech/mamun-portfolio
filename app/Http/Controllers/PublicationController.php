@@ -1,11 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Publication;
+use App\Models\PublicationFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PublicationController extends Controller
 {
@@ -25,6 +29,7 @@ class PublicationController extends Controller
 
         return Inertia::render('Publications', [
             'publications' => Publication::search($search)
+                ->with('files')
                 ->where('type', $type)
                 ->latest('id')
                 ->paginate(10)
@@ -36,5 +41,15 @@ class PublicationController extends Controller
             'activeType' => $type,
             'search' => $search,
         ]);
+    }
+
+    /**
+     * Opens the PDF in the browser.
+     */
+    public function file(PublicationFile $file): StreamedResponse
+    {
+        abort_unless(Storage::disk('local')->exists($file->file_path), 404);
+
+        return Storage::disk('local')->response($file->file_path, $file->file_name, ['Content-Type' => 'application/pdf']);
     }
 }

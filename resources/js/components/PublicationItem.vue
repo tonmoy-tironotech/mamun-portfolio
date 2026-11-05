@@ -1,5 +1,6 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue';
+import PublicationFiles from './PublicationFiles.vue';
 
 defineProps({
     number: { type: Number, required: true },
@@ -35,6 +36,7 @@ onBeforeUnmount(() => observer?.disconnect());
         <div class="pub-body">
             <h3>{{ publication.title }}</h3>
             <div ref="description" class="pub-description rich-text" v-html="publication.description"></div>
+            <PublicationFiles :files="publication.files" />
             <button v-if="isCut" type="button" class="pub-more" @click="$emit('view-more', publication)">View More &#8599;</button>
         </div>
     </li>
