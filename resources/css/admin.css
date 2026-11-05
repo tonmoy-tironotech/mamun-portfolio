@@ -227,6 +227,24 @@ form .btn {
     text-decoration: line-through;
 }
 
+.file-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.file-row input[type="file"] {
+    flex: 1 1 260px;
+    width: auto;
+}
+
+.file-row input[type="text"] {
+    flex: 1 1 200px;
+    width: auto;
+}
+
 /* Projects */
 
 .toolbar {

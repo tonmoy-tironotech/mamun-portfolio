@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['file_path', 'file_name', 'file_size'])]
+#[Fillable(['file_path', 'file_name', 'file_size', 'label'])]
 #[Hidden(['file_path'])]
 class PublicationFile extends Model
 {

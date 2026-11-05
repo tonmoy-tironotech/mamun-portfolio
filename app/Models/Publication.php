@@ -50,7 +50,7 @@ class Publication extends Model
     }
 
     /**
-     * PDFs are labelled pdf1, pdf2, ... in upload order.
+     * PDFs use their own label, or pdf1, pdf2, ... by position when none was given.
      *
      * @return list<array<string, mixed>>
      */
@@ -58,7 +58,7 @@ class Publication extends Model
     {
         return $this->files->values()->map(fn (PublicationFile $file, int $index) => [
             'id' => $file->id,
-            'label' => 'pdf'.($index + 1),
+            'label' => $file->label ?: 'pdf'.($index + 1),
             'file_name' => $file->file_name,
             'file_size' => $file->file_size,
         ])->all();

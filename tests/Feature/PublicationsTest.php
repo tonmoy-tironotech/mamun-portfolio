@@ -24,6 +24,7 @@ class PublicationsTest extends TestCase
 
     public function test_seeded_publications_are_grouped_with_the_latest_first(): void
     {
+        Storage::fake('local');
         $this->seed(PublicationSeeder::class);
 
         $this->get('/publications')->assertInertia(fn (Assert $page) => $page
@@ -42,10 +43,13 @@ class PublicationsTest extends TestCase
 
     public function test_seeder_only_runs_once(): void
     {
+        Storage::fake('local');
+
         $this->seed(PublicationSeeder::class);
         $this->seed(PublicationSeeder::class);
 
         $this->assertDatabaseCount('publications', 10);
+        $this->assertDatabaseCount('publication_files', 6);
     }
 
     public function test_unknown_type_falls_back_to_the_first_tab(): void
@@ -55,6 +59,7 @@ class PublicationsTest extends TestCase
 
     public function test_a_new_publication_is_listed_first(): void
     {
+        Storage::fake('local');
         $this->seed(PublicationSeeder::class);
         $this->makePublication(['title' => 'Newest paper']);
 
@@ -166,7 +171,10 @@ class PublicationsTest extends TestCase
             'type' => 'journal',
             'title' => 'With files',
             'description' => '<p>Text</p>',
-            'files' => [UploadedFile::fake()->create('a.pdf', 100, 'application/pdf'), UploadedFile::fake()->create('b.pdf', 100, 'application/pdf')],
+            'files' => [
+                ['file' => UploadedFile::fake()->create('a.pdf', 100, 'application/pdf'), 'label' => ''],
+                ['file' => UploadedFile::fake()->create('b.pdf', 100, 'application/pdf'), 'label' => 'Preprint'],
+            ],
         ])->assertRedirect('/admin/publications');
 
         $publication = Publication::firstWhere('title', 'With files');
@@ -175,7 +183,7 @@ class PublicationsTest extends TestCase
 
         $this->get('/publications')->assertInertia(fn (Assert $page) => $page
             ->where('publications.data.0.files.0.label', 'pdf1')
-            ->where('publications.data.0.files.1.label', 'pdf2')
+            ->where('publications.data.0.files.1.label', 'Preprint')
             ->missing('publications.data.0.files.0.file_path'));
 
         $this->get("/publications/files/{$publication->files[0]->id}")->assertOk()->assertHeader('Content-Type', 'application/pdf');
@@ -195,7 +203,7 @@ class PublicationsTest extends TestCase
             'title' => 'A paper',
             'description' => '<p>Some authors</p>',
             'remove_files' => [$old->id],
-            'files' => [UploadedFile::fake()->create('new.pdf', 100, 'application/pdf')],
+            'files' => [['file' => UploadedFile::fake()->create('new.pdf', 100, 'application/pdf')]],
         ])->assertRedirect('/admin/publications');
 
         $files = $publication->fresh()->files;
@@ -227,8 +235,8 @@ class PublicationsTest extends TestCase
             'type' => 'journal',
             'title' => 'Bad file',
             'description' => '<p>Text</p>',
-            'files' => [UploadedFile::fake()->create('a.exe', 10, 'application/octet-stream')],
-        ])->assertSessionHasErrors('files.0');
+            'files' => [['file' => UploadedFile::fake()->create('a.exe', 10, 'application/octet-stream')]],
+        ])->assertSessionHasErrors('files.0.file');
 
         $this->assertDatabaseCount('publications', 0);
     }

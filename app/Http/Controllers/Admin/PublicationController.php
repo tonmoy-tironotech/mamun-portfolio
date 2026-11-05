@@ -94,7 +94,8 @@ class PublicationController extends Controller
             'title' => ['required', 'string', 'max:500'],
             'description' => ['required', 'string', 'max:60000'],
             'files' => ['nullable', 'array', 'max:20'],
-            'files.*' => ['file', 'mimes:pdf', 'max:20480'],
+            'files.*.file' => ['required', 'file', 'mimes:pdf', 'max:20480'],
+            'files.*.label' => ['nullable', 'string', 'max:50'],
             'remove_files' => ['nullable', 'array'],
             'remove_files.*' => ['integer'],
         ]);
@@ -106,11 +107,14 @@ class PublicationController extends Controller
      */
     private function storeFiles(Request $request, Publication $publication): void
     {
-        foreach ($request->file('files', []) as $file) {
+        foreach ($request->file('files', []) as $index => $row) {
+            $file = $row['file'];
+
             $publication->files()->create([
                 'file_path' => $file->store('publications', 'local'),
                 'file_name' => basename($file->getClientOriginalName()),
                 'file_size' => $file->getSize(),
+                'label' => trim((string) $request->input("files.{$index}.label")) ?: null,
             ]);
         }
     }
