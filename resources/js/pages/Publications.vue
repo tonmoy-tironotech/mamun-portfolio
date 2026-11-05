@@ -7,6 +7,8 @@ import TablePager from '../components/TablePager.vue';
 import { useSearch } from '../composables/useSearch';
 import SiteLayout from '../layouts/SiteLayout.vue';
 
+
+
 const props = defineProps({
     publications: { type: Object, required: true },
     types: { type: Array, required: true },
