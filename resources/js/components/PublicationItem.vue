@@ -29,7 +29,6 @@ onMounted(() => {
 
 onBeforeUnmount(() => observer?.disconnect());
 </script>
-
 <template>
     <li>
         <span class="pub-number">{{ number }}</span>
