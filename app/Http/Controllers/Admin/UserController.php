@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
@@ -22,14 +23,15 @@ class UserController extends Controller
             'users' => User::query()
                 ->when($search !== '', fn (Builder $query) => $query->where(function (Builder $query) use ($search) {
                     $query->where('name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%");
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('student_id', 'like', "%{$search}%");
                 }))
                 ->orderByRaw('case when is_admin = 0 and email_verified_at is not null and approved_at is null and rejected_at is null then 0 else 1 end')
                 ->latest('id')
                 ->paginate(10)
                 ->withQueryString()
                 ->through(fn (User $user) => [
-                    ...$user->only('id', 'name', 'email', 'is_admin'),
+                    ...$user->only('id', 'name', 'email', 'student_id', 'is_admin', 'member_status'),
                     'is_unverified' => ! $user->hasVerifiedEmail(),
                     'is_rejected' => $user->rejected_at !== null,
                     'is_pending' => $user->hasVerifiedEmail() && ! $user->isApproved() && $user->rejected_at === null,
@@ -42,7 +44,8 @@ class UserController extends Controller
     public function edit(User $user): Response
     {
         return Inertia::render('admin/users/Form', [
-            'user' => $user->only('id', 'name', 'email'),
+            'user' => $user->only('id', 'name', 'email', 'is_admin', 'student_id', 'education_level', 'mobile', 'member_status', 'profile_photo'),
+            'memberStatuses' => User::MEMBER_STATUSES,
         ]);
     }
 
@@ -51,13 +54,25 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user)],
+            'student_id' => ['nullable', 'string', 'max:50', Rule::unique('users', 'student_id')->ignore($user)],
+            'education_level' => ['nullable', 'string', 'max:100'],
+            'mobile' => ['nullable', 'string', 'regex:'.User::MOBILE_PATTERN],
+            'member_status' => ['sometimes', Rule::in(array_keys(User::MEMBER_STATUSES))],
             'password' => ['nullable', 'confirmed', Password::defaults()],
+        ], [], [
+            'student_id' => 'student ID',
+            'education_level' => 'education level',
         ]);
 
-        $user->fill($request->only('name', 'email'));
+        $user->fill(Arr::only($validated, ['name', 'email', 'student_id', 'education_level', 'mobile']));
 
         if ($validated['password'] ?? null) {
             $user->password = $validated['password'];
+        }
+
+        // Not mass assignable, so sign up can never set it
+        if (isset($validated['member_status'])) {
+            $user->member_status = $validated['member_status'];
         }
 
         $user->save();
@@ -92,5 +107,12 @@ class UserController extends Controller
         $user->forceFill(['approved_at' => null])->save();
 
         return back()->with('status', "{$user->name} is back under review.");
+    }
+
+    public function destroyPhoto(User $user): RedirectResponse
+    {
+        $user->removeProfilePhoto();
+
+        return back()->with('status', "{$user->name}'s photo was removed.");
     }
 }

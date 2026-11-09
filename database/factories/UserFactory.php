@@ -31,6 +31,10 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'approved_at' => now(),
+            'student_id' => fake()->unique()->numerify('S-#####'),
+            'education_level' => 'Bachelor',
+            'mobile' => fake()->numerify('017########'),
+            'member_status' => 'current',
         ];
     }
 
@@ -58,5 +62,13 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    /**
+     * A student who has left the lab.
+     */
+    public function old(): static
+    {
+        return $this->state(fn (array $attributes) => ['member_status' => 'old']);
     }
 }

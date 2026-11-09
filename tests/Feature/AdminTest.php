@@ -131,6 +131,9 @@ class AdminTest extends TestCase
     public function test_sign_up_cannot_grant_admin_access(): void
     {
         $this->post('/register', [
+            'student_id' => 'S-1001',
+            'education_level' => 'Bachelor',
+            'mobile' => '01712345678',
             'name' => 'A Student',
             'email' => 'student@example.com',
             'password' => 'brand-new-password',
@@ -144,6 +147,9 @@ class AdminTest extends TestCase
     public function test_student_can_sign_up(): void
     {
         $this->post('/register', [
+            'student_id' => 'S-1001',
+            'education_level' => 'Bachelor',
+            'mobile' => '01712345678',
             'name' => 'A Student',
             'email' => 'student@example.com',
             'password' => 'brand-new-password',
@@ -160,6 +166,9 @@ class AdminTest extends TestCase
         $existing = User::factory()->create();
 
         $this->post('/register', [
+            'student_id' => 'S-1001',
+            'education_level' => 'Bachelor',
+            'mobile' => '01712345678',
             'name' => 'A Student',
             'email' => $existing->email,
             'password' => 'brand-new-password',

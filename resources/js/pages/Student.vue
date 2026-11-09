@@ -1,5 +1,6 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import TablePager from '../components/TablePager.vue';
 import { useSearch } from '../composables/useSearch';
 import { fileSize } from '../format';
@@ -13,6 +14,8 @@ const props = defineProps({
 
 const page = usePage();
 const term = useSearch(props.search, '/student-corner');
+
+const showPhotoWarning = computed(() => !props.isRejected && !page.props.auth.user.is_admin && !page.props.auth.user.profile_photo);
 </script>
 
 <template>
@@ -28,6 +31,11 @@ const term = useSearch(props.search, '/student-corner');
             </div>
 
             <p v-if="page.props.flash.status" class="form-success" role="status">{{ page.props.flash.status }}</p>
+
+            <div v-if="showPhotoWarning" class="photo-warning" role="status">
+                <p><strong>Please upload your profile photo.</strong> It will be shown next to your name on the Members page.</p>
+                <Link :href="$url('/student-corner/profile')" class="photo-warning-button">Upload photo</Link>
+            </div>
 
             <div v-if="isRejected" class="review-notice rejected-notice" role="status">
                 <h3>Your account was not approved</h3>

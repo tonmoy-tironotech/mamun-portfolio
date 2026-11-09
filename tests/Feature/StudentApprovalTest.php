@@ -38,6 +38,9 @@ class StudentApprovalTest extends TestCase
     public function test_new_sign_up_is_pending_and_cannot_approve_itself(): void
     {
         $this->post('/register', [
+            'student_id' => 'S-1001',
+            'education_level' => 'Bachelor',
+            'mobile' => '01712345678',
             'name' => 'A Student',
             'email' => 'student@example.com',
             'password' => 'brand-new-password',

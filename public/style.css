@@ -1700,3 +1700,224 @@ html:has(.pub-modal[open]) {
 		font-size: 22px;
 	}
 }
+
+
+/* Members */
+
+.member-section {
+	margin-top: 32px;
+}
+
+.member-heading {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 22px;
+	letter-spacing: 0;
+	line-height: 1.3;
+	font-size: 28px;
+}
+
+.member-count {
+	padding: 2px 12px;
+	background: #EEF2F7;
+	border-radius: 999px;
+	font-family: 'Open Sans', Arial, sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	color: #475569;
+}
+
+.member-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 32px 24px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.member-card {
+	text-align: center;
+}
+
+.member-photo {
+	display: block;
+	width: 170px;
+	max-width: 100%;
+	aspect-ratio: 1 / 1;
+	margin: 0 auto 14px;
+	background: #E2E8F0;
+	border: 1px solid #D8DEE8;
+	border-radius: 12px;
+	object-fit: cover;
+}
+
+.member-name {
+	margin: 0 0 4px;
+	letter-spacing: 0;
+	line-height: 1.3;
+	font-size: 20px;
+}
+
+.member-card p {
+	margin: 0;
+	line-height: 1.5;
+	font-size: 14px;
+}
+
+.member-level {
+	font-weight: 600;
+}
+
+.member-meta {
+	color: #64748B;
+}
+
+.member-email {
+	overflow-wrap: anywhere;
+}
+
+.member-empty {
+	margin: 0 0 8px;
+	color: #64748B;
+}
+
+/* Photo warning and the photo card on the profile page */
+
+.photo-warning {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin: 0 0 20px;
+	padding: 14px 18px;
+	background: #FFFBEB;
+	border: 1px solid #FDE68A;
+	border-radius: 12px;
+}
+
+.photo-warning p {
+	margin: 0;
+	line-height: 1.5;
+	color: #78350F;
+}
+
+.photo-warning-button {
+	padding: 8px 16px;
+	background: #92400E;
+	border-radius: 8px;
+	white-space: nowrap;
+	font-weight: 600;
+	color: #FFFFFF;
+}
+
+.photo-warning-button:hover {
+	background: #78350F;
+	text-decoration: none;
+}
+
+.profile-photo-card {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 24px;
+	margin-bottom: 24px;
+}
+
+.profile-avatar {
+	flex: none;
+	width: 120px;
+	height: 120px;
+	background: #E2E8F0;
+	border-radius: 12px;
+	object-fit: cover;
+}
+
+.profile-photo-body {
+	flex: 1;
+	min-width: 220px;
+}
+
+.profile-photo-body h3 {
+	margin-bottom: 4px;
+	letter-spacing: 0;
+	font-size: 22px;
+}
+
+.profile-photo-body p {
+	margin: 6px 0 12px;
+	line-height: 1.5;
+}
+
+.profile-photo-body .photo-warning-text {
+	font-weight: 600;
+	color: #92400E;
+}
+
+.photo-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+}
+
+.photo-pick {
+	position: relative;
+	display: inline-block;
+	padding: 8px 16px;
+	background: #FFFFFF;
+	border: 1px solid #C8D0DC;
+	border-radius: 8px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.photo-pick:focus-within {
+	outline: 2px solid rgba(11, 83, 148, 0.3);
+}
+
+.photo-pick input {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.photo-button {
+	padding: 9px 18px;
+	background: #000033;
+	border: 0;
+	border-radius: 8px;
+	font: inherit;
+	color: #FFFFFF;
+	cursor: pointer;
+}
+
+.photo-button:disabled {
+	opacity: 0.6;
+	cursor: wait;
+}
+
+.photo-remove {
+	padding: 0;
+	background: none;
+	border: 0;
+	text-decoration: underline;
+	font: inherit;
+	color: #B91C1C;
+	cursor: pointer;
+}
+
+@media (max-width: 600px) {
+	.member-grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 24px 14px;
+	}
+
+	.member-heading {
+		font-size: 24px;
+	}
+}

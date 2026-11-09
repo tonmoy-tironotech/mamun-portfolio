@@ -26,6 +26,9 @@ class EmailVerificationTest extends TestCase
     private function signUp(): User
     {
         $this->post('/register', [
+            'student_id' => 'S-1001',
+            'education_level' => 'Bachelor',
+            'mobile' => '01712345678',
             'name' => 'A Student',
             'email' => 'student@example.com',
             'password' => 'brand-new-password',

@@ -357,6 +357,25 @@ tr.unread {
     color: #991b1b;
 }
 
+.photo-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.photo-row img {
+    width: 72px;
+    height: 72px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.badge-current {
+    background: #e0f2fe;
+    color: #075985;
+}
+
 .badge-replied {
     background: #e7f6ec;
     color: #14632f;

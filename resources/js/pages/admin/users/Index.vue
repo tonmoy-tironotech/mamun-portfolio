@@ -35,7 +35,9 @@ const revoke = (user) => {
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Student ID</th>
                         <th>Status</th>
+                        <th>Member</th>
                         <th>Joined</th>
                         <th class="col-actions">Actions</th>
                     </tr>
@@ -44,12 +46,16 @@ const revoke = (user) => {
                     <tr v-for="user in users.data" :key="user.id">
                         <td class="col-name">{{ user.name }}</td>
                         <td class="col-email">{{ user.email }}</td>
+                        <td>{{ user.student_id ?? '-' }}</td>
                         <td>
                             <span v-if="user.is_admin" class="badge badge-admin">Admin</span>
                             <span v-else-if="user.is_unverified" class="badge">Unverified</span>
                             <span v-else-if="user.is_rejected" class="badge badge-rejected">Rejected</span>
                             <span v-else-if="user.is_pending" class="badge badge-pending">Pending</span>
                             <span v-else class="badge badge-replied">Approved</span>
+                        </td>
+                        <td>
+                            <span v-if="!user.is_admin" class="badge" :class="{ 'badge-current': user.member_status !== 'old' }">{{ user.member_status === 'old' ? 'Old' : 'Current' }}</span>
                         </td>
                         <td class="col-date">{{ user.joined }}</td>
                         <td class="col-actions">
@@ -60,7 +66,7 @@ const revoke = (user) => {
                         </td>
                     </tr>
                     <tr v-if="!users.data.length">
-                        <td colspan="5" class="empty">{{ search ? 'No users match your search.' : 'No users yet.' }}</td>
+                        <td colspan="7" class="empty">{{ search ? 'No users match your search.' : 'No users yet.' }}</td>
                     </tr>
                 </tbody>
             </table>

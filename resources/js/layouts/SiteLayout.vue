@@ -13,6 +13,7 @@ const menu = [
     { href: "/experience", label: "Experience", component: "Experience" },
     { href: "/projects", label: "Projects", component: "Projects" },
     { href: "/publications", label: "Publications", component: "Publications" },
+    { href: "/members", label: "Members", component: "Members" },
     {
         href: "/student-corner",
         label: "Student Corner",

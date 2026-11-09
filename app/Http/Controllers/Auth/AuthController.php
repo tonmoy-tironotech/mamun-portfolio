@@ -73,7 +73,13 @@ class AuthController extends Controller
         $user = User::create($request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users'],
+            'student_id' => ['required', 'string', 'max:50', 'unique:users,student_id'],
+            'education_level' => ['required', 'string', 'max:100'],
+            'mobile' => ['required', 'string', 'regex:'.User::MOBILE_PATTERN],
             'password' => ['required', 'confirmed', Password::defaults()],
+        ], [], [
+            'student_id' => 'student ID',
+            'education_level' => 'education level',
         ]));
 
         Auth::login($user);

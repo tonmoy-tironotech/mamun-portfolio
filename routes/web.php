@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PublicationController;
@@ -21,6 +22,7 @@ Route::inertia('/experience', 'Experience')->name('experience');
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects');
 Route::get('/projects/{project:slug}', [ProjectController::class, 'show'])->name('projects.show');
 Route::get('/publications', [PublicationController::class, 'index'])->name('publications');
+Route::get('/members', [MemberController::class, 'index'])->name('members');
 Route::get('/publications/{publication}/pdf', [PublicationController::class, 'pdf'])->name('publications.pdf');
 Route::inertia('/hobbies', 'Hobbies')->name('hobbies');
 Route::inertia('/contact', 'Contact')->name('contact');
@@ -45,6 +47,8 @@ Route::middleware('auth')->group(function () {
     Route::inertia('/student-corner/profile', 'StudentProfile')->name('student.profile');
     Route::put('/student-corner/profile', [ProfileController::class, 'update']);
     Route::put('/student-corner/profile/password', [ProfileController::class, 'updatePassword']);
+    Route::post('/student-corner/profile/photo', [ProfileController::class, 'updatePhoto'])->middleware(['email.verified', 'throttle:10,1']);
+    Route::delete('/student-corner/profile/photo', [ProfileController::class, 'destroyPhoto'])->middleware('email.verified');
     Route::middleware(['email.verified', 'approved'])->group(function () {
         Route::get('/student-corner/documents/{document}', [StudentController::class, 'show'])->name('student.documents.show');
         Route::get('/student-corner/documents/{document}/download', [StudentController::class, 'download'])->name('student.documents.download');
@@ -64,6 +68,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('/users/{user}/approve', [AdminUserController::class, 'approve'])->name('users.approve');
     Route::delete('/users/{user}/approve', [AdminUserController::class, 'revoke'])->name('users.revoke');
     Route::post('/users/{user}/reject', [AdminUserController::class, 'reject'])->name('users.reject');
+    Route::delete('/users/{user}/photo', [AdminUserController::class, 'destroyPhoto'])->name('users.photo.destroy');
     Route::resource('messages', ContactMessageController::class)->only(['index', 'show', 'destroy']);
     Route::post('/messages/{message}/reply', [ContactMessageController::class, 'reply'])->name('messages.reply');
 });

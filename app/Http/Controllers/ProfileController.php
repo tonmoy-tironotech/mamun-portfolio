@@ -50,4 +50,22 @@ class ProfileController extends Controller
 
         return back()->with('status', 'Password changed.');
     }
+
+    public function updatePhoto(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'photo' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ]);
+
+        $request->user()->replaceProfilePhoto($request->file('photo'));
+
+        return back()->with('status', 'Profile photo updated.');
+    }
+
+    public function destroyPhoto(Request $request): RedirectResponse
+    {
+        $request->user()->removeProfilePhoto();
+
+        return back()->with('status', 'Profile photo removed.');
+    }
 }

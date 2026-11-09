@@ -78,7 +78,7 @@ class UsersAndProfileTest extends TestCase
             ->component('admin/users/Form')
             ->where('user.email', $user->email)
             ->missing('user.password')
-            ->missing('user.is_admin'));
+            ->where('user.is_admin', false));
 
         $this->put("/admin/users/{$user->id}", $this->userData($user, ['name' => 'New Name', 'email' => 'new@example.com', 'password' => '', 'password_confirmation' => '']))
             ->assertRedirect('/admin/users');

@@ -49,7 +49,10 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            'auth' => fn () => ['user' => $request->user()?->only('id', 'name', 'email', 'is_admin')],
+            'auth' => fn () => ['user' => $request->user() ? [
+                ...$request->user()->only('id', 'name', 'email', 'is_admin', 'profile_photo'),
+                'email_verified' => $request->user()->hasVerifiedEmail(),
+            ] : null],
             'flash' => fn () => ['status' => $request->session()->get('status')],
             'unreadMessages' => fn () => $request->is('admin', 'admin/*') && $request->user()?->is_admin
                 ? ContactMessage::whereNull('read_at')->count()

@@ -3,7 +3,7 @@ import { Link, useForm } from '@inertiajs/vue3';
 import AuthPanel from '../../components/AuthPanel.vue';
 import { url } from '../../url';
 
-const form = useForm({ name: '', email: '', password: '', password_confirmation: '' });
+const form = useForm({ name: '', email: '', student_id: '', education_level: '', mobile: '', password: '', password_confirmation: '' });
 
 const submit = () => form.post(url('/register'), { onFinish: () => form.reset('password', 'password_confirmation') });
 </script>
@@ -18,6 +18,18 @@ const submit = () => form.post(url('/register'), { onFinish: () => form.reset('p
             <label for="email">Email</label>
             <input id="email" v-model="form.email" type="email" autocomplete="username" required />
             <p v-if="form.errors.email" class="field-error">{{ form.errors.email }}</p>
+
+            <label for="student_id">Student ID</label>
+            <input id="student_id" v-model="form.student_id" type="text" maxlength="50" autocomplete="off" required />
+            <p v-if="form.errors.student_id" class="field-error">{{ form.errors.student_id }}</p>
+
+            <label for="education_level">Education level</label>
+            <input id="education_level" v-model="form.education_level" type="text" maxlength="100" placeholder="e.g. B.Sc 3rd year, M.Sc, PhD" required />
+            <p v-if="form.errors.education_level" class="field-error">{{ form.errors.education_level }}</p>
+
+            <label for="mobile">Mobile</label>
+            <input id="mobile" v-model="form.mobile" type="tel" autocomplete="tel" placeholder="01XXXXXXXXX" required />
+            <p v-if="form.errors.mobile" class="field-error">{{ form.errors.mobile }}</p>
 
             <label for="password">Password</label>
             <input id="password" v-model="form.password" type="password" autocomplete="new-password" required />

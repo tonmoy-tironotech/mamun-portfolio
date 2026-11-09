@@ -11,15 +11,29 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'student_id', 'education_level', 'mobile'])]
 #[Hidden(['password', 'remember_token', 'email_verification_code'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    /**
+     * Whether a student is at the lab now or has left. Shown as tabs on the Members page.
+     *
+     * @var array<string, string>
+     */
+    public const MEMBER_STATUSES = ['current' => 'Current Students', 'old' => 'Old Students'];
+
+    /**
+     * Digits with optional spaces or dashes, and an optional leading +.
+     */
+    public const MOBILE_PATTERN = '/^\+?[0-9][0-9\s\-]{5,18}[0-9]$/';
 
     public const VERIFICATION_CODE_MINUTES = 15;
 
@@ -104,6 +118,43 @@ class User extends Authenticatable
         $query->where('is_admin', false)
             ->whereNotNull('email_verified_at')
             ->whereNull('approved_at')
+            ->whereNull('rejected_at');
+    }
+
+    /**
+     * Save a new profile photo and delete the one it replaces.
+     */
+    public function replaceProfilePhoto(UploadedFile $photo): void
+    {
+        $path = '/uploads/'.$photo->store('profiles', 'uploads');
+
+        $this->deleteProfilePhotoFile();
+        $this->forceFill(['profile_photo' => $path])->save();
+    }
+
+    public function removeProfilePhoto(): void
+    {
+        $this->deleteProfilePhotoFile();
+        $this->forceFill(['profile_photo' => null])->save();
+    }
+
+    private function deleteProfilePhotoFile(): void
+    {
+        if ($this->profile_photo !== null && str_starts_with($this->profile_photo, '/uploads/')) {
+            Storage::disk('uploads')->delete(substr($this->profile_photo, strlen('/uploads/')));
+        }
+    }
+
+    /**
+     * Verified, approved students: the people listed on the public Members page.
+     *
+     * @param  Builder<User>  $query
+     */
+    public function scopeApprovedStudents(Builder $query): void
+    {
+        $query->where('is_admin', false)
+            ->whereNotNull('email_verified_at')
+            ->whereNotNull('approved_at')
             ->whereNull('rejected_at');
     }
 
