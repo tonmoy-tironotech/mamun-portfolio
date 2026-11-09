@@ -9,6 +9,7 @@ defineProps({
         <a v-if="publication.has_pdf" :href="$url(`/publications/${publication.id}/pdf`)" target="_blank" rel="noopener" title="Open PDF" aria-label="Open PDF">
             <img class="pub-pdf-icon" :src="$url('/images/pdf_icon_small.png')" width="37" height="38" alt="" />
         </a>
+        
         <a v-if="publication.link_url" :href="publication.link_url" target="_blank" rel="noopener noreferrer" title="Open link" aria-label="Open link">
             <svg viewBox="0 0 32 32" width="40" height="40" aria-hidden="true">
                 <circle cx="16" cy="16" r="15" fill="#0B5394" />
