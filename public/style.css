@@ -1079,6 +1079,12 @@ a:hover {
 	transform: translateY(-2px);
 }
 
+.pub-links .pub-pdf-icon {
+	display: block;
+	width: auto;
+	height: 38px;
+}
+
 .pub-modal-links {
 	flex: none;
 	margin: 0;
